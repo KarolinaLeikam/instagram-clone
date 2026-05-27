@@ -1,0 +1,52 @@
+/* normalize.scss */
+
+/* box model */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* убираем отступы */
+body,
+h1, h2, h3, h4, h5, h6,
+p,
+ul, ol,
+figure {
+  margin: 0;
+  padding: 0;
+}
+
+/* списки */
+ul, ol {
+  list-style: none;
+}
+
+/* ссылки */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* изображения */
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* формы */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  border: none;
+  outline: none;
+}
+
+/* кнопки */
+button {
+  background: none;
+  cursor: pointer;
+}

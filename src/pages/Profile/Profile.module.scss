@@ -1,0 +1,28 @@
+.container {
+  
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+.wifi {
+ padding: 16px 16px 0 16px;
+}
+
+.content {
+  flex: 1;
+   overflow-y: auto;
+   padding: 0 16px;
+   padding-bottom: calc(80px + env(safe-area-inset-bottom) + 20px)
+   
+}
+
+.footer{
+    position: fixed;
+  width: 100%;
+  z-index: 1000;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
