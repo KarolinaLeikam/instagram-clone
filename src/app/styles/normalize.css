@@ -9,16 +9,39 @@
 
 /* убираем отступы */
 body,
-h1, h2, h3, h4, h5, h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
 p,
-ul, ol,
+ul,
+ol,
 figure {
   margin: 0;
   padding: 0;
+  color: #000000;
+}
+
+h1 {
+  font-size: 22px;
+}
+
+h2 {
+  font-size: 15px;
+}
+p {
+  font-size: 11px;
+}
+
+a {
+  text-decoration: none;
 }
 
 /* списки */
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
@@ -30,9 +53,8 @@ a {
 
 /* изображения */
 img {
-  display: block;
-  max-width: 100%;
   height: auto;
+  object-fit: cover;
 }
 
 /* формы */
