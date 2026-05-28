@@ -5,19 +5,17 @@ import ShopImg from '@/assets/FooterImg/Shop.png';
 import AvatarImg from '@/assets/Avatar.jpg';
 import styles from './Footer.module.scss';
 
-const Footer = () => {
-  return (
-    <div className={styles.container}>
-      <div className={styles.contentImg}>
-        <img src={HomeImg} alt="" />
-        <img src={PlayImg} alt="" />
-        <img src={SearchImg} alt="" />
-        <img src={ShopImg} alt="" />
-        <div className={styles.circle}>
-          <img className={styles.AvatarImg} src={AvatarImg} alt="" />
-        </div>
+const Footer = () => (
+  <div className={styles.container}>
+    <div className={styles.contentImg}>
+      <img src={HomeImg} alt="" />
+      <img src={PlayImg} alt="" />
+      <img src={SearchImg} alt="" />
+      <img src={ShopImg} alt="" />
+      <div className={styles.circle}>
+        <img className={styles.AvatarImg} src={AvatarImg} alt="" />
       </div>
     </div>
-  );
-};
+  </div>
+);
 export default Footer;

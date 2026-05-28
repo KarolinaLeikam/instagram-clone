@@ -3,13 +3,11 @@ import PictureImg from '@/assets/SwitchImg/Picture.png';
 import PlayImg from '@/assets/SwitchImg/Play.png';
 import styles from './SwitchImage.module.scss';
 
-const SwitchImage = () => {
-  return (
-    <div className={styles.switch}>
-      <img src={GridImg} alt="" />
-      <img src={PictureImg} alt="" />
-      <img src={PlayImg} alt="" />
-    </div>
-  );
-};
+const SwitchImage = () => (
+  <div className={styles.switch}>
+    <img src={GridImg} alt="" />
+    <img src={PictureImg} alt="" />
+    <img src={PlayImg} alt="" />
+  </div>
+);
 export default SwitchImage;

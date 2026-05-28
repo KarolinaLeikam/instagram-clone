@@ -1,25 +1,23 @@
-import styles from './GridPosts.module.scss';
 import Post from '@/components/componentsProfil/Post/Post';
+import styles from './GridPosts.module.scss';
 
-const GridPosts = () => {
-  return (
-    <div className={styles.grid}>
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-    </div>
-  );
-};
+const GridPosts = () => (
+  <div className={styles.grid}>
+    <Post />
+    <Post />
+    <Post />
+    <Post />
+    <Post />
+    <Post />
+    <Post />
+    <Post />
+    <Post />
+    <Post />
+    <Post />
+    <Post />
+    <Post />
+    <Post />
+    <Post />
+  </div>
+);
 export default GridPosts;

@@ -1,14 +1,11 @@
-import Profile from '@/pages/Profile/Profile';
 import Feed from '@/pages/Feed/Feed';
-import './styles';
+import './styles/index.js';
 
-function App() {
-  return (
-    <>
-      {/* <Profile /> */}
-      <Feed/>
-    </>
-  );
-}
+const App = () => (
+  <>
+    {/* <Profile /> */}
+    <Feed />
+  </>
+);
 
 export default App;

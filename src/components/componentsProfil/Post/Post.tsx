@@ -1,11 +1,9 @@
-import styles from './Post.module.scss';
 import PostImg from '@/assets/Post.jpg';
+import styles from './Post.module.scss';
 
-const Post = () => {
-  return (
-    <div className={styles.post}>
-      <img className={styles.img} src={PostImg} alt="" />
-    </div>
-  );
-};
+const Post = () => (
+  <div className={styles.post}>
+    <img className={styles.img} src={PostImg} alt="" />
+  </div>
+);
 export default Post;
