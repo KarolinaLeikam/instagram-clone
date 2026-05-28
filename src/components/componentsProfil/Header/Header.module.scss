@@ -1,0 +1,33 @@
+.header {
+  width: 100%;
+  padding: 24px 0;
+}
+
+.container {
+  max-width: 1200px; /* Контент не расползется шире 1200px */
+  margin: 0 auto; /* Магия! Автоматические отступы слева и справа центрируют блок */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nameContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.menuContainer {
+  display: flex;
+  gap: 16px;
+}
+
+.buttonNumber {
+  background-color: #fd0635;
+  color: #ffffff;
+  border-radius: 10px;
+  width: 23px;
+  height: 15px;
+  font-size: 11px;
+  text-align: center;
+}

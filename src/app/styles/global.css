@@ -1,0 +1,28 @@
+/* globals.scss */
+
+body {
+  padding: 0 16px;
+  margin: 0;
+
+  font-family: 'Inter', sans-serif;
+
+  background-color: #ffffff;
+}
+
+/* плавные анимации для UI элементов */
+input,
+button,
+a {
+  transition: all 0.2s ease;
+}
+
+/* focus для доступности */
+:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 3px;
+}
+
+/* root контейнер */
+#root {
+  width: 100%;
+}
