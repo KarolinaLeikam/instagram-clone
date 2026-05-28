@@ -13,16 +13,13 @@ const Information: React.FC = () => {
         <Avatar />
         <AllFollowers />
       </div>
-
       <NameProfile />
       <div className={styles.buttons}>
-        {' '}
         <Button className={styles.buttonRedactor}>Modifier le profil</Button>
         <Button className={styles.buttonSubcribe}>
           <img src={SubcribeImg} alt="" />
         </Button>
       </div>
-
       <Stories />
       <SwitchImage />
     </div>
