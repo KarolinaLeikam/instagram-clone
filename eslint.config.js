@@ -64,6 +64,11 @@ export default [
       ],
       // TS handles these — airbnb defaults redundant here
       'react/prop-types': 'off',
+      // React 19 dropped defaultProps for fn components — use default args
+      'react/require-default-props': [
+        'error',
+        { functions: 'defaultArguments' },
+      ],
       'import-x/extensions': [
         'error',
         'ignorePackages',

@@ -1,4 +1,3 @@
-import React from 'react';
 import Avatar from '@/components/generalcomponents/Avatar/Avatar';
 import StoryFriend from '../StoryFriend/StoryFriend';
 import styles from './StoriesHeader.module.scss';

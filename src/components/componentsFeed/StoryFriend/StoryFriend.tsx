@@ -1,4 +1,3 @@
-import React from 'react';
 import AvatarImg from '@/assets/PostFriendImg/Friend.avif';
 import styles from './StoryFriend.module.scss';
 

@@ -2,8 +2,12 @@ import AvatarImg from '@/assets/Avatar.jpg';
 import PlusImg from '@/assets/PlusBlue.png';
 import styles from './Avatar.module.scss';
 
-const Avatar = (props) => {
-  const { className = '', size = 80 } = props;
+interface AvatarProps {
+  className?: string;
+  size?: number;
+}
+
+const Avatar = ({ className = '', size = 80 }: AvatarProps) => {
   const containerStyle = {
     width: `${size}px`,
     height: `${size}px`,

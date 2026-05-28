@@ -1,4 +1,3 @@
-import React from 'react';
 import HeartImg from '@/assets/StatusBarImg/Heart.png';
 import PlusSmallImg from '@/assets/StatusBarImg/PlusSmall.png';
 import PaperImg from '@/assets/StatusBarImg/Paper.png';
