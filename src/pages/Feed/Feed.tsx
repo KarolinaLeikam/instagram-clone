@@ -1,9 +1,9 @@
-import HeaderFeed from '@/components/componentsFeed/HeaderFeed/HeaderFeed';
+import HeaderFeed from '@/pages/Feed/components/HeaderFeed/HeaderFeed';
 
-import Footer from '@/components/generalcomponents/Footer/Footer';
-import StatusBar from '@/components/generalcomponents/StatusBar/StatusBar';
-import PostFriend from '@/components/componentsFeed/PostFriend/PostFriend';
-import StoriesHeader from '@/components/componentsFeed/StoriesHeader/StoriesHeader';
+import Footer from '@/components/common/Footer/Footer';
+import StatusBar from '@/components/common/StatusBar/StatusBar';
+import PostFriend from '@/pages/Feed/components/PostFriend/PostFriend';
+import StoriesHeader from '@/pages/Feed/components/StoriesHeader/StoriesHeader';
 import styles from './Feed.module.scss';
 
 const Feed: React.FC = () => (

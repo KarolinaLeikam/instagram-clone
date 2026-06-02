@@ -1,8 +1,5 @@
-import Header from '@/components/componentsProfil/Header/Header';
-import Information from '@/components/componentsProfil/Information/Information';
-import GridPosts from '@/components/componentsProfil/GridPosts/GridPosts';
-import Footer from '@/components/generalcomponents/Footer/Footer';
-import StatusBar from '@/components/generalcomponents/StatusBar/StatusBar';
+import { Header, Information, GridPosts } from './components';
+import { Footer, StatusBar } from '@/components/common';
 import styles from './Profile.module.scss';
 
 const Profile: React.FC = () => (
