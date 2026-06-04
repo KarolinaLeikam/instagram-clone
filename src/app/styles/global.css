@@ -1,12 +1,14 @@
 /* globals.scss */
 
 body {
-  padding: 0 16px;
+  padding: 0;
   margin: 0;
 
   font-family: 'Inter', sans-serif;
 
   background-color: #ffffff;
+
+  height: 100vh;
 }
 
 /* плавные анимации для UI элементов */

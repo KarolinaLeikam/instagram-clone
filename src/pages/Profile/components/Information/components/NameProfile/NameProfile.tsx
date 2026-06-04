@@ -1,6 +1,6 @@
 const NameProfile = () => (
   <div>
-    <p>MonNom</p>
+    <h3>MonNom</h3>
     <p>La description de mon profil</p>
   </div>
 );

@@ -7,12 +7,19 @@ import StoriesHeader from '@/pages/Feed/components/StoriesHeader/StoriesHeader';
 import styles from './Feed.module.scss';
 
 const Feed: React.FC = () => (
-  <div className={styles.container}>
+  <div className={styles.page}>
     <StatusBar />
-    <HeaderFeed />
-    <StoriesHeader />
-    <PostFriend />
-    <Footer />
+    <div className={styles.content}>
+      <HeaderFeed />
+      <StoriesHeader />
+      <div className={styles.postsContainer}>
+        <PostFriend />
+        <PostFriend />
+      </div>
+    </div>
+    <div className={styles.footer}>
+      <Footer />
+    </div>
   </div>
 );
 

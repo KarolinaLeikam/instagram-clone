@@ -1,4 +1,4 @@
-import { PlusIcon } from '@/assets/Icons/GeneralIcons';
+import { PlusBigIcon } from '@/assets/Icons/GeneralIcons';
 import styles from './Stories.module.scss';
 
 const Stories = () => (
@@ -6,7 +6,7 @@ const Stories = () => (
     <div className={styles.containerCenter}>
       {' '}
       <button type="button" className={styles.circle} aria-label="Add story">
-        <PlusIcon />
+        <PlusBigIcon />
       </button>
       <p>Hello</p>
     </div>

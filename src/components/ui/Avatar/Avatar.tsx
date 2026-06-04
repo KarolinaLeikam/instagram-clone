@@ -1,5 +1,5 @@
 import AvatarImg from '@/assets/Images/Avatar.jpg';
-import { PlusIcon } from '@/assets/Icons/GeneralIcons';
+import { PlusSmallIcon } from '@/assets/Icons/GeneralIcons';
 import styles from './Avatar.module.scss';
 
 interface AvatarProps {
@@ -18,7 +18,7 @@ const Avatar = ({ className = '', size = 80 }: AvatarProps) => {
       <img className={styles.photo} src={AvatarImg} alt="" />
 
       <div className={styles.borderPlus}>
-        <PlusIcon className={styles.plus} />
+        <PlusSmallIcon className={styles.plus} />
       </div>
     </div>
   );

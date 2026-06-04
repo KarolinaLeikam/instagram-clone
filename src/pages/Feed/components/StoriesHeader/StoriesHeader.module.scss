@@ -2,6 +2,14 @@
   display: flex;
   gap: 12px;
   margin-bottom: 24px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+  margin-right: -16px;
+  padding-right: 16px;
+    margin-left: -16px;
+  padding-left: 16px;
 }
 
 .avatar {

@@ -1,11 +1,12 @@
 .container {
-  padding: 16px;
+
   background-color: #ffffff;
-  height: 100px;
+  height: 80px;
 }
 .contentImg {
   display: flex;
   justify-content: space-between;
+    padding: 16px 16px 0 ;
 
   img {
     object-fit: cover;

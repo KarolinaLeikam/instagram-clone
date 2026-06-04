@@ -7,7 +7,7 @@ interface FollowersProps {
 
 const Followers = ({ number, nameColumn }: FollowersProps) => (
   <div className={styles.container}>
-    <p className={styles.number}>{number}</p>
+    <h2 className={styles.number}>{number}</h2>
     <p>{nameColumn}</p>
   </div>
 );

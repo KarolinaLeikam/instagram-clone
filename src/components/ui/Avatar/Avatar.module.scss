@@ -5,13 +5,18 @@
 }
 .borderPlus {
   background-color: #0094f5;
-  border-radius: 20px;
+  border-radius: 50%;
   border-color: #ffffff;
-  border: solid 3px #ffffff;
+  border: solid 2px #ffffff;
   position: absolute;
   right: 0;
   bottom: 0;
   transform: translate(10%, 10%);
+  width: 22px;
+  height: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .container {
   width: 80px;

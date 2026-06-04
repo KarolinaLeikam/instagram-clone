@@ -1,26 +1,23 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 .container {
-  height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   background-color: #ffffff;
 }
-.wifi {
-  padding: 16px 16px 0 16px;
-}
 
 .content {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   padding: 0 16px;
-  padding-bottom: calc(80px + env(safe-area-inset-bottom) + 20px);
 }
-
 .footer {
-  position: fixed;
-  width: 100%;
-  z-index: 1000;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  flex-shrink: 0;
 }

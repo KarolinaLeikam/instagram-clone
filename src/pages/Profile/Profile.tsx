@@ -3,16 +3,13 @@ import { Footer, StatusBar } from '@/components/common';
 import styles from './Profile.module.scss';
 
 const Profile: React.FC = () => (
-  <div className={styles.container}>
-    <div className={styles.wifi}>
-      <StatusBar />
-    </div>
+  <div className={styles.page}>
+    <StatusBar />
     <div className={styles.content}>
       <Header />
-      <Information /> <GridPosts />
+      <Information />
+      <GridPosts />
     </div>
-
-    {/* <TestCard title="Likes" count={10} />; */}
     <div className={styles.footer}>
       <Footer />
     </div>
