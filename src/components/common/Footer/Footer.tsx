@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import {
   HomeIcon,
   PlayAltIcon,
@@ -10,13 +11,17 @@ import styles from './Footer.module.scss';
 const Footer = () => (
   <div className={styles.container}>
     <div className={styles.contentImg}>
-      <HomeIcon />
+      <Link to="/">
+        <HomeIcon />
+      </Link>
       <PlayAltIcon />
       <SearchIcon />
       <ShopBagIcon />
-      <div className={styles.circle}>
-        <img className={styles.AvatarImg} src={AvatarImg} alt="" />
-      </div>
+      <Link to="/profile">
+        <div className={styles.circle}>
+          <img className={styles.AvatarImg} src={AvatarImg} alt="" />
+        </div>
+      </Link>
     </div>
   </div>
 );
