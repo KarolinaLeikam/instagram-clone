@@ -1,8 +1,12 @@
 import AvatarImg from '@/assets/Images/Post.jpg';
 import styles from './StoryFriend.module.scss';
 
-const StoryFriend = () => (
-  <div className={styles.layout}>
+interface StoryFriendProps {
+  onClick?: () => void;
+}
+
+const StoryFriend = ({ onClick }: StoryFriendProps) => (
+  <div className={styles.layout} onClick={onClick}>
     <div className={styles.circle}>
       <img src={AvatarImg} alt="" />
     </div>
