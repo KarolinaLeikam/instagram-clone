@@ -1,0 +1,126 @@
+.layoutHeaderIcons {
+  display: flex;
+  gap: 16px;
+}
+
+.containerAvatarName {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.friendAvatar {
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50%;
+}
+.layoutHeader {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 8px;
+}
+.containerHeader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 16px 16px 0;
+}
+.containerStory {
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
+}
+
+.dialog {
+  width: 100vw;
+  height: 100dvh;
+  max-width: 100vw;
+  max-height: 100dvh;
+  border: none;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+
+  background: #000000;
+  color: #ffffff;
+  h3 {
+    color: #ffffff;
+  }
+  p {
+    color: #ffffff;
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.storyPicture {
+  border-radius: 9px;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.footer {
+  height: 104px;
+}
+
+.layoutFooter {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding-top: 24px;
+}
+
+.input {
+  color: #ffffff;
+  border-radius: 100px;
+  background: transparent;
+  border: 2px solid #464646;
+  height: 42px;
+  width: 278px;
+  &:focus {
+    outline: none;
+    border-color: #777777; /* При клике можно сделать рамку чуть светлее */
+  }
+  &::placeholder {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 300;
+    padding-left: 20px;
+  }
+}
+
+.progressBarBackground {
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.35);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressBarLine {
+  height: 100%;
+  background-color: #ffffff;
+  width: 0%;
+
+  animation-name: progressAnimation;
+  animation-duration: 14s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes progressAnimation {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
