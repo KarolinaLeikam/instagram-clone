@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Feed from '@/pages/Feed/Feed';
 import Profile from '@/pages/Profile/Profile';
+import Post from '@/pages/Post/Post';
 import './styles/index.js';
 
 const router = createBrowserRouter([
@@ -11,6 +12,10 @@ const router = createBrowserRouter([
   {
     path: '/profile',
     element: <Profile />,
+  },
+  {
+    path: '/post',
+    element: <Post />,
   },
 ]);
 
