@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding: 16px 24px 10px;
+}
+.layoutIcons {
+  display: flex;
+  gap: 8px;
+  height: 13px;
+  width: fit-content;
+}

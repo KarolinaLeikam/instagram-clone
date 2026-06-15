@@ -26,10 +26,15 @@ figure {
 
 h1 {
   font-size: 22px;
+  font-weight: 700;
 }
 
 h2 {
   font-size: 15px;
+}
+h3 {
+  font-size: 13px;
+  font-weight: 600;
 }
 p {
   font-size: 11px;

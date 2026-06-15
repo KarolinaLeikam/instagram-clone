@@ -1,0 +1,21 @@
+.containerAvatar {
+  display: flex;
+  height: 80px;
+  width: 100%;
+  align-items: center;
+  gap: 55px;
+   margin-bottom: 8px;
+}
+
+.buttonSubcribe {
+  width: 32px;
+}
+.buttonRedactor {
+  width: 322px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 16px 0;
+}

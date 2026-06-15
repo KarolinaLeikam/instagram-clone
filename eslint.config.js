@@ -74,6 +74,7 @@ export default [
         'ignorePackages',
         { ts: 'never', tsx: 'never' },
       ],
+      'import-x/no-unresolved': ['error', { ignore: ['\\?react$'] }],
     },
   },
 

@@ -1,0 +1,67 @@
+.friendAvatar {
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50%;
+}
+.containerAvatarName {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.containerHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.post {
+  width: 100vw;
+  height: 440px;
+  padding: 5px 0;
+
+  position: relative;
+  left: 50%;
+  margin-left: -50vw;
+}
+
+.containerLikes {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.bottomPost {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.dots {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+
+  div {
+    background-color: #d0d0d0;
+    border-radius: 50%;
+    width: 6px;
+    height: 6px;
+  }
+  .active {
+    background-color: #0094f5;
+  }
+}
+.likes {
+  margin-bottom: 8px;
+}
+
+.text {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  p {
+    font-size: 13px;
+  }
+}
