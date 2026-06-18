@@ -1,61 +1,107 @@
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { EyeIcon, EyeClosedIcon } from '@/assets/Icons/GeneralIcons';
+import styles from './SignUp.module.scss';
 import { useState } from 'react';
 
-const SignUp = () => {
-  const [contact,setContact]=useState("")
-   const [fullName,setFullName]=useState("")
-    const [userName,setUserName]=useState("")
-     const [password,setPassword]=useState("")
-
-
-     const handleSignUp=()=>{
-      if(!contact||!password||!userName||!fullName){
-        alert{'Пожалуйста, заполните все поля!'};
-        return;
-      }
-     const usernameRegex = /^[a-zA-Z0-9_]+$/;
-      if(!usernameRegex.test(userName)||userName.length<3||userName.length > 20){
-        alert('Имя пользователя должно содержать только латиницу, цифры или _,и быть длиннее 3 символов и меньше 20');
-    return;
-      }
-   
-  if (password.length < 8) {
-    alert('Пароль слишком короткий (минимум 8 символов)');
-    return;
-  }
-      
-     }
-  const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
-  const userExists = existingUsers.some((user) => user.login === username);
-  if (userExists) {
-    alert('Пользователь с таким именем уже существует!');
-    return;
-  }
-
-  if(!userExists){  
-  const newUser = { login: username, password: password };
-  existingUsers.push(newUser);
-const  localStorage.setItem('users', JSON.stringify(existingUsers));
-alert("Успешно")
-  localStorage.setItem('isAuth', 'true');
-  navigate('/'); 
+interface FormInput {
+  mail: string;
+  fullName: string;
+  userName: string;
+  password: string;
 }
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!$@?-]).{8,}$/;
+const userRegex = /^[a-zA-Z0-9][a-zA-Z0-9._]{1,18}[a-zA-Z0-9]$/;
 
+const SignUp = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<FormInput>({
+    mode: 'onChange',
+    defaultValues: {
+      mail: '',
+      fullName: '',
+      userName: '',
+      password: '',
+    },
+  });
+  const onSubmit: SubmitHandler<FormInput> = (data) => console.log(data);
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
+  };
   return (
     <>
-      <div>
-        <input type="text" placeholder="Mobile Number or Email" />
-        <input type="text" placeholder="Full Name" />
-        <input type="text" placeholder="UserName" />
-        <input type="text" placeholder="Password" />
-      </div>
-      <div>
-        <Button>Sign up</Button>
-      </div>
-      <div>
-        <p>Have an account?</p>
-        <Link to="/login">Log in.</Link>
+      {' '}
+      <div className={styles.container}>
+        {' '}
+        <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+          <input
+            {...register('mail', {
+              required: 'Email обязателен для заполнения',
+              pattern: {
+                value: emailRegex,
+                message: 'Введите корректный адрес (например, user@mail.com)',
+              },
+            })}
+            placeholder="Email"
+          />
+          {errors.mail && <p>{errors.mail.message}</p>}
+          <input
+            {...register('fullName', {
+              required: 'Fullname обязателен для заполнения',
+              minLength: 2,
+            })}
+            placeholder="Full Name"
+          />
+          {errors.fullName && <p>{errors.fullName.message}</p>}
+          <input
+            {...register('userName', {
+              required: 'userName обязателен для заполнения',
+              pattern: {
+                value: userRegex,
+                message: 'От 3 до 20 символов, латиница и цифры',
+              },
+            })}
+            placeholder="Username"
+          />
+          {errors.userName && <p>{errors.userName.message}</p>}
+          <div className={styles.divPassword}>
+            {' '}
+            <input
+              {...register('password', {
+                required: 'Password обязателен для заполнения',
+                pattern: {
+                  value: passwordRegex,
+                  message: 'Пароль слишком простой!',
+                },
+              })}
+              placeholder="Password"
+              type={showPassword ? 'text' : 'password'}
+              className={styles.inputPassword}
+            />
+            {showPassword ? (
+              <EyeClosedIcon
+                className={styles.icons}
+                onClick={togglePassword}
+              />
+            ) : (
+              <EyeIcon className={styles.icons} onClick={togglePassword} />
+            )}
+          </div>
+
+          {errors.password && <p>{errors.password.message}</p>}
+          <input type="submit" value="Sign up" disabled={!isValid} />
+        </form>
+        <div>
+          <p>Have an account?</p>
+          <Link to="/login">Log in.</Link>
+        </div>
       </div>
     </>
   );

@@ -7,7 +7,7 @@ import Feed from '@/pages/Feed/Feed';
 import Profile from '@/pages/Profile/Profile';
 import Post from '@/pages/Post/Post';
 import Login from '@/pages/Login/Login.js';
-import SignUp from '@/pages/SignUp/Signup.js';
+import SignUp from '@/pages/SignUp/SignUp';
 import ProtectedRoute from '@/components/common/ProtectedRoute/ProtectedRoute.js';
 import './styles/index.js';
 
