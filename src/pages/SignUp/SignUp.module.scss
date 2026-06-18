@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  input {
+    background-color: bisque;
+  }
+}
+.divPassword {
+  position: relative;
+  align-items: center;
+}
+.inputPassword {
+  width: 100%;
+}
+
+.icons {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 33px;
+  height: auto;
+}
