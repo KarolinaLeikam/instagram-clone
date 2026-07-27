@@ -1,6 +1,7 @@
 import {
   createBrowserRouter,
   Navigate,
+  Outlet,
   RouterProvider,
 } from 'react-router-dom';
 import Feed from '@/pages/Feed/Feed';
@@ -9,7 +10,17 @@ import Post from '@/pages/Post/Post';
 import Login from '@/pages/Login/Login.js';
 import SignUp from '@/pages/SignUp/SignUp';
 import ProtectedRoute from '@/components/common/ProtectedRoute/ProtectedRoute.js';
+import { AuthProvider } from '@/context/AuthContext';
+import { GetAllPosts } from '@/context/GetAllPosts';
 import './styles/index.js';
+
+const ProtectedLayout = () => (
+  <AuthProvider>
+    <ProtectedRoute>
+      <Outlet />
+    </ProtectedRoute>
+  </AuthProvider>
+);
 
 const router = createBrowserRouter([
   {
@@ -21,32 +32,30 @@ const router = createBrowserRouter([
     element: <SignUp />,
   },
   {
-    path: '/',
-    element: (
-      <ProtectedRoute>
-        <Feed />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/profile',
-    element: (
-      <ProtectedRoute>
-        <Profile />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/post',
-    element: (
-      <ProtectedRoute>
-        <Post />
-      </ProtectedRoute>
-    ),
+    element: <ProtectedLayout />,
+    children: [
+      { path: '/main', element: <Feed /> },
+      {
+        path: '/profile',
+        element: (
+          <GetAllPosts>
+            <Profile />
+          </GetAllPosts>
+        ),
+      },
+      {
+        path: '/post',
+        element: (
+          <GetAllPosts>
+            <Post />
+          </GetAllPosts>
+        ),
+      },
+    ],
   },
   {
     path: '*',
-    element: <Navigate to="/" replace />,
+    element: <Navigate to="/login" replace />,
   },
 ]);
 

@@ -7,12 +7,12 @@ import { StatusBar } from '@/components/common';
 
 import styles from './StoriesModal.module.scss';
 
-interface StoriesModalProps {
+export interface StoriesModalProps {
   isOpen: boolean;
-  onClose: () => void;
+  onMyClose: () => void;
 }
 
-const StoriesModal = ({ isOpen, onClose }: StoriesModalProps) => {
+const StoriesModal = ({ isOpen, onMyClose }: StoriesModalProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const [key, setKey] = useState(0);
@@ -29,7 +29,7 @@ const StoriesModal = ({ isOpen, onClose }: StoriesModalProps) => {
         prev + 1;
       });
       timerId = setTimeout(() => {
-        onClose();
+        onMyClose();
       }, 14000);
     } else {
       dialog.close();
@@ -39,10 +39,10 @@ const StoriesModal = ({ isOpen, onClose }: StoriesModalProps) => {
         clearTimeout(timerId);
       }
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onMyClose]);
 
   return (
-    <dialog ref={dialogRef} onClose={onClose} className={styles.dialog}>
+    <dialog ref={dialogRef} onClose={onMyClose} className={styles.dialog}>
       <div className={styles.container}>
         <StatusBar />
         <div className={styles.containerStory}>
@@ -58,7 +58,7 @@ const StoriesModal = ({ isOpen, onClose }: StoriesModalProps) => {
               </div>
               <div className={styles.layoutHeaderIcons}>
                 <MenuDotsIcon />
-                <CrossIcon onClick={onClose} />
+                <CrossIcon onClick={onMyClose} />
               </div>
             </div>
           </div>

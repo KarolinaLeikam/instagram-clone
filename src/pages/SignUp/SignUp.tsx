@@ -1,18 +1,21 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { EyeIcon, EyeClosedIcon } from '@/assets/Icons/GeneralIcons';
-import styles from './SignUp.module.scss';
-import { useState } from 'react';
+import {
+  EyeIcon,
+  EyeClosedIcon,
+  InstagramIcon,
+} from '@/assets/Icons/GeneralIcons';
+import AuthInput from '@/components/common/AuthInput/AuthInput';
 
-interface FormInput {
+import { useState } from 'react';
+import { emailRegex, passwordRegex, userRegex } from '@/utils/validation';
+import styles from './SignUp.module.scss';
+export interface FormInput {
   mail: string;
   fullName: string;
   userName: string;
   password: string;
 }
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!$@?-]).{8,}$/;
-const userRegex = /^[a-zA-Z0-9][a-zA-Z0-9._]{1,18}[a-zA-Z0-9]$/;
 
 const SignUp = () => {
   const {
@@ -28,7 +31,37 @@ const SignUp = () => {
       password: '',
     },
   });
-  const onSubmit: SubmitHandler<FormInput> = (data) => console.log(data);
+
+  const navigate = useNavigate();
+
+  const onSubmit: SubmitHandler<FormInput> = async (data) => {
+    try {
+      const path = 'http://localhost:4000';
+      const body = JSON.stringify({
+        email: data.mail,
+        username: data.userName,
+        name: data.fullName,
+        password: data.password,
+      });
+      const response = await fetch(`${path}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body,
+      });
+      if (!response.ok) {
+        throw new Error('Ошибка регистрации');
+      }
+
+      const result = await response.json();
+      localStorage.setItem('token', result.token);
+      console.log(result);
+
+      navigate('/');
+    } catch (err) {
+      console.error('Ошибка регистрации:', err);
+      alert('Что-то пошло не так, попробуйте снова');
+    }
+  };
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -36,74 +69,73 @@ const SignUp = () => {
     setShowPassword(!showPassword);
   };
   return (
-    <>
-      {' '}
-      <div className={styles.container}>
-        {' '}
-        <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-          <input
-            {...register('mail', {
-              required: 'Email обязателен для заполнения',
+    <div className={styles.container}>
+      <InstagramIcon />
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+        <AuthInput
+          register={register}
+          name="mail"
+          rules={{
+            required: 'Email обязателен для заполнения',
+            pattern: {
+              value: emailRegex,
+              message: 'Введите корректный адрес (например, user@mail.com)',
+            },
+          }}
+          placeholder="Email"
+          error={errors.mail}
+        />
+        <AuthInput
+          register={register}
+          name="fullName"
+          rules={{
+            required: 'Fullname обязателен для заполнения',
+            minLength: 2,
+          }}
+          placeholder="Full Name"
+          error={errors.fullName}
+        />
+        <AuthInput
+          register={register}
+          name="userName"
+          rules={{
+            pattern: {
+              value: userRegex,
+              message: 'От 3 до 20 символов, латиница и цифры',
+            },
+          }}
+          placeholder="User Name"
+          error={errors.userName}
+        />
+        <div className={styles.divPassword}>
+          <AuthInput
+            register={register}
+            name="password"
+            rules={{
               pattern: {
-                value: emailRegex,
-                message: 'Введите корректный адрес (например, user@mail.com)',
+                value: passwordRegex,
+                message: 'Пароль слишком простой!',
               },
-            })}
-            placeholder="Email"
+            }}
+            placeholder="Password"
+            type={showPassword ? 'text' : 'password'}
+            error={errors.password}
           />
-          {errors.mail && <p>{errors.mail.message}</p>}
-          <input
-            {...register('fullName', {
-              required: 'Fullname обязателен для заполнения',
-              minLength: 2,
-            })}
-            placeholder="Full Name"
-          />
-          {errors.fullName && <p>{errors.fullName.message}</p>}
-          <input
-            {...register('userName', {
-              required: 'userName обязателен для заполнения',
-              pattern: {
-                value: userRegex,
-                message: 'От 3 до 20 символов, латиница и цифры',
-              },
-            })}
-            placeholder="Username"
-          />
-          {errors.userName && <p>{errors.userName.message}</p>}
-          <div className={styles.divPassword}>
-            {' '}
-            <input
-              {...register('password', {
-                required: 'Password обязателен для заполнения',
-                pattern: {
-                  value: passwordRegex,
-                  message: 'Пароль слишком простой!',
-                },
-              })}
-              placeholder="Password"
-              type={showPassword ? 'text' : 'password'}
-              className={styles.inputPassword}
-            />
-            {showPassword ? (
-              <EyeClosedIcon
-                className={styles.icons}
-                onClick={togglePassword}
-              />
-            ) : (
-              <EyeIcon className={styles.icons} onClick={togglePassword} />
-            )}
-          </div>
-
-          {errors.password && <p>{errors.password.message}</p>}
-          <input type="submit" value="Sign up" disabled={!isValid} />
-        </form>
-        <div>
-          <p>Have an account?</p>
-          <Link to="/login">Log in.</Link>
+          {showPassword ? (
+            <EyeClosedIcon className={styles.icons} onClick={togglePassword} />
+          ) : (
+            <EyeIcon className={styles.icons} onClick={togglePassword} />
+          )}
         </div>
+        <input type="submit" value="Sign up" disabled={!isValid} className={styles.button} />
+      </form>
+      <div className={styles.layoutText}>
+        <p>Have an account?</p>
+        <Link className={styles.link} to="/login">
+          Log in.
+        </Link>
       </div>
-    </>
+    </div>
   );
 };
 

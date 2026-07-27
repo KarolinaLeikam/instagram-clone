@@ -1,0 +1,23 @@
+.dialog {
+  box-sizing: border-box;
+  position: fixed;
+  inset: auto 0 0 0;
+  height: 40vh;
+  width: 100vw;
+  max-width: none;
+  margin: 0;
+  border-top-right-radius: 30px;
+  border-top-left-radius: 30px;
+  border: none;
+}
+.containerBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.button {
+  margin-top: 50px;
+  width: 100%;
+  color: red;
+  font-weight: 600;
+}

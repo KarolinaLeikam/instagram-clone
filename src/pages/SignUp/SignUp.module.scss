@@ -1,24 +1,25 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  align-items: center;
+
+  margin-top: 70px;
+
+  p {
+    color: #aea9a9;
+  }
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-
-  input {
-    background-color: bisque;
-  }
+  gap: 8px;
+  margin-top: 40px;
+  margin-bottom: 58px;
 }
 .divPassword {
   position: relative;
   align-items: center;
-}
-.inputPassword {
-  width: 100%;
 }
 
 .icons {
@@ -28,4 +29,28 @@
   transform: translateY(-50%);
   width: 33px;
   height: auto;
+}
+.link {
+  color: #1877f2;
+  font-weight: 600;
+  font-size: 13px;
+}
+.layoutText {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.button {
+  background-color: #1877f2;
+  color: #fff9f9;
+  border-radius: 7px;
+  height: 32px;
+  font-size: 13px;
+  font-weight: 600;
+
+  &:disabled {
+    background-color: rgb(24, 119, 242, 36%);
+  }
 }

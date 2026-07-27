@@ -72,3 +72,4 @@ authRouter.get('/me', requireAuth, async (req: AuthRequest, res) => {
   });
   res.json({ user });
 });
+

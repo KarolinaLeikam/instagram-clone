@@ -8,6 +8,7 @@ import AngleLeftIcon from './angle-left.svg?react';
 import CrossIcon from './cross.svg?react';
 import EyeIcon from './eye.svg?react';
 import EyeClosedIcon from './eye-closed.svg?react';
+import InstagramIcon from './instagram.svg?react';
 
 export {
   MenuDotsIcon,
@@ -19,5 +20,6 @@ export {
   AngleLeftIcon,
   CrossIcon,
   EyeIcon,
-  EyeClosedIcon
+  EyeClosedIcon,
+  InstagramIcon,
 };
