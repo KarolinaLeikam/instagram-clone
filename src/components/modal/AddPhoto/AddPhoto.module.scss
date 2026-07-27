@@ -1,0 +1,26 @@
+.dialog {
+  width: 95vw;
+  height: 80dvh;
+  border: none;
+  padding: 0;
+  margin: auto;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.previewImg {
+  width: 95%;
+  object-fit: cover;
+}
+
+.previewContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
