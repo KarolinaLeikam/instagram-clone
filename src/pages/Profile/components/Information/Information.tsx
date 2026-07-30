@@ -8,7 +8,7 @@ import {
 } from './components';
 import styles from './Information.module.scss';
 
-const Information: React.FC = () => (
+const Information = () => (
   <div className={styles.container}>
     <div className={styles.containerAvatar}>
       <Avatar />

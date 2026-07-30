@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom';
-import PostImg from '@/assets/Images/Post.jpg';
 import styles from './Post.module.scss';
 
-const Post = () => (
-  <Link to="/post">
-    <div className={styles.post}>
-      <img className={styles.img} src={PostImg} alt="" />
-    </div>
+const Post = ({ post }) => (
+  <Link to="/post" className={styles.post}>
+    <img
+      className={styles.img}
+      src={`http://localhost:4000${post.cover}`}
+      alt=""
+    />
   </Link>
 );
+
 export default Post;
