@@ -1,10 +1,10 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { usePosts } from '@/context/GetAllPosts';
 import { Footer, StatusBar } from '@/components/common';
 import PostFriend from '@/components/common/PostFriend/PostFriend';
 import HeaderPublication from './components/HeaderPublication/HeaderPublication';
-import { usePosts } from '@/context/GetAllPosts';
+
 import styles from './Post.module.scss';
 
 const Post = () => {
@@ -12,10 +12,10 @@ const Post = () => {
   const { allPostsFetch, posts } = usePosts();
 
   useEffect(() => {
-    if (!user.username) return;
+    if (!user?.username) return;
 
     allPostsFetch();
-  }, [user.username]);
+  }, [user?.username, allPostsFetch]);
 
   return (
     <div className={styles.page}>

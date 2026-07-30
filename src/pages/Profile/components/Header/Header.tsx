@@ -5,7 +5,7 @@ import { useState } from 'react';
 import AddPhoto from '@/components/modal/AddPhoto/AddPhoto';
 import styles from './Header.module.scss';
 
-const Header: React.FC = () => {
+const Header = () => {
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (

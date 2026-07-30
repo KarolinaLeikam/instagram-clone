@@ -1,6 +1,6 @@
 import { Footer, StatusBar } from '@/components/common';
 import { Header, Information, GridPosts } from './components';
-import { GetAllPosts } from '@/context/GetAllPosts';
+
 import styles from './Profile.module.scss';
 
 const Profile = () => (

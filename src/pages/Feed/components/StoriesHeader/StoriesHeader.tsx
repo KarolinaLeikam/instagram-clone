@@ -20,7 +20,7 @@ const StoriesHeader = () => {
       <StoryFriend />
       <StoriesModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onMyClose={() => setIsModalOpen(false)}
       />
     </div>
   );

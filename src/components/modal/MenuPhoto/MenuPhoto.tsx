@@ -1,11 +1,19 @@
 import { Button } from '@/components/ui';
 import { CrossIcon } from '@/assets/Icons/GeneralIcons';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { PostType } from '@/context/GetAllPosts';
 import DeleteModal from '../DeleteModal/DeleteModal';
+
 import styles from './MenuPhoto.module.scss';
 
-const MenuPhoto = ({ isOpen, onMyClose, post }) => {
-  const dialogRef = useRef(null);
+interface MenuType {
+  isOpen: boolean;
+  onMyClose: () => void;
+  post: PostType;
+}
+
+const MenuPhoto: React.FC<MenuType> = ({ isOpen, onMyClose, post }) => {
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -15,7 +23,6 @@ const MenuPhoto = ({ isOpen, onMyClose, post }) => {
     }
     if (isOpen) {
       dialog.showModal();
-      console.log('hello');
     } else {
       dialog.close();
     }

@@ -1,13 +1,11 @@
-import React from 'react';
-import { useContext, createContext, ReactNode, useState } from 'react';
+import {
+  useCallback,
+  useContext,
+  createContext,
+  type ReactNode,
+  useState,
+} from 'react';
 import { useAuth } from './AuthContext';
-
-interface ContextType {
-  allPostsFetch: () => Promise<void>;
-  posts: PostType[];
-}
-
-const PostsContext = createContext<any>(null);
 
 export interface PostType {
   id: string;
@@ -16,18 +14,30 @@ export interface PostType {
   commentCount: number;
 }
 
+interface ContextType {
+  allPostsFetch: () => Promise<void>;
+  posts: PostType[];
+}
+
+const initial: ContextType = {
+  allPostsFetch: () => Promise.resolve(),
+  posts: [],
+};
+const PostsContext = createContext<ContextType>(initial);
+
 export const GetAllPosts = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const [posts, setPosts] = useState<PostType[]>([]);
+  const username = user?.username;
 
-  async function allPostsFetch() {
+  const allPostsFetch = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
         return;
       }
       const response = await fetch(
-        `http://localhost:4000/users/${user.username}/posts`,
+        `http://localhost:4000/users/${username}/posts`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -37,7 +47,8 @@ export const GetAllPosts = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       console.log(error);
     }
-  }
+  }, [username]);
+
   return (
     <PostsContext.Provider value={{ allPostsFetch, posts }}>
       {children}

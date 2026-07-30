@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import type { PostType } from '@/pages/Post/Post';
+import type { PostType } from '@/context/GetAllPosts';
 import { usePosts } from '@/context/GetAllPosts';
 import styles from './DeleteModal.module.scss';
 
@@ -13,7 +13,7 @@ interface Props {
 
 const DeleteModal = ({ isOpen, onCancel, post }: Props) => {
   const { allPostsFetch } = usePosts();
-  const dialogRef = useRef(null);
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
   const { user } = useAuth();
 
   const handleDeletePost = async () => {

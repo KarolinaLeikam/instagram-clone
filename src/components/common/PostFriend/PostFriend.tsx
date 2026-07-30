@@ -1,7 +1,5 @@
 import FriendFoto from '@/assets/Images/Post.jpg';
 import { useAuth } from '@/context/AuthContext';
-import MenuPhoto from '../../modal/MenuPhoto/MenuPhoto';
-
 import {
   BookMarkIcon,
   CommentIcon,
@@ -10,10 +8,12 @@ import {
 } from '@/assets/Icons/InterectionIcons';
 import { useLocation } from 'react-router-dom';
 import { MenuDotsIcon } from '@/assets/Icons/GeneralIcons';
-import styles from './PostFriend.module.scss';
 import { useState } from 'react';
+import type { PostType } from '@/context/GetAllPosts';
+import MenuPhoto from '../../modal/MenuPhoto/MenuPhoto';
+import styles from './PostFriend.module.scss';
 
-const PostFriend = ({ post }) => {
+const PostFriend = ({ post }: { post: PostType }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const { user } = useAuth();
   console.log(modalOpen);

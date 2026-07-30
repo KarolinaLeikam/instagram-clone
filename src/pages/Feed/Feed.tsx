@@ -1,5 +1,4 @@
 import HeaderFeed from '@/pages/Feed/components/HeaderFeed/HeaderFeed';
-
 import Footer from '@/components/common/Footer/Footer';
 import StatusBar from '@/components/common/StatusBar/StatusBar';
 import PostFriend from '@/components/common/PostFriend/PostFriend';
@@ -8,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import styles from './Feed.module.scss';
 
-const Feed: React.FC = () => {
+const Feed = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
@@ -20,11 +19,12 @@ const Feed: React.FC = () => {
     <div className={styles.page}>
       <StatusBar />
       <div className={styles.content}>
-        <button onClick={handleLogout}>Exit</button>
+        <button type="button" onClick={handleLogout}>
+          Exit
+        </button>
         <HeaderFeed />
         <StoriesHeader />
         <div className={styles.postsContainer}>
-          <PostFriend />
           <PostFriend />
         </div>
       </div>

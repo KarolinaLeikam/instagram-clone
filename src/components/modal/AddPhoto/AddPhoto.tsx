@@ -1,23 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { CrossIcon } from '@/assets/Icons/GeneralIcons';
-import { type StoriesModalProps } from '../Stories/StoriesModal';
 import { Button } from '@/components/ui';
 import { usePosts } from '@/context/GetAllPosts';
+import { type StoriesModalProps } from '../Stories/StoriesModal';
 import styles from './AddPhoto.module.scss';
 
 const AddPhoto = ({ isOpen, onMyClose }: StoriesModalProps) => {
-  const dialogRef = useRef(null);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const [previewUrl, setPreviewUrl] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const { allPostsFetch } = usePosts();
 
   useEffect(() => {
     const dialog = dialogRef.current;
-    console.log('useEffect');
     if (!dialog) return;
 
     if (isOpen) {
@@ -27,8 +26,15 @@ const AddPhoto = ({ isOpen, onMyClose }: StoriesModalProps) => {
     }
   }, [isOpen]);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+
+    if (!files?.length) {
+      return;
+    }
+
+    const file = files[0];
+
     if (!file) return;
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
@@ -37,16 +43,17 @@ const AddPhoto = ({ isOpen, onMyClose }: StoriesModalProps) => {
     const newPreviewUrl = URL.createObjectURL(file);
     setPreviewUrl(newPreviewUrl);
   };
-  const handleCloseModal = () => {
+
+  const handleCloseModal = useCallback(() => {
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
       setPreviewUrl(null);
       setSelectedFile(null);
     }
     onMyClose();
-  };
+  }, [previewUrl, onMyClose]);
 
-  async function fetchPost() {
+  const fetchPost = useCallback(async () => {
     if (!selectedFile) {
       alert('Сначала выберите фото!');
       return;
@@ -75,7 +82,7 @@ const AddPhoto = ({ isOpen, onMyClose }: StoriesModalProps) => {
     } catch (err) {
       console.error(err);
     }
-  }
+  }, [allPostsFetch, handleCloseModal, selectedFile]);
 
   return (
     <dialog
@@ -94,7 +101,7 @@ const AddPhoto = ({ isOpen, onMyClose }: StoriesModalProps) => {
             accept="image/*"
           />
           {!previewUrl && (
-            <Button onClick={() => fileInputRef.current.click()}>
+            <Button onClick={() => fileInputRef.current?.click()}>
               Выбрать фото с компьютера
             </Button>
           )}

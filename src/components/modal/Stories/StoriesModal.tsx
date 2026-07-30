@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MenuDotsIcon, CrossIcon } from '@/assets/Icons/GeneralIcons';
 import FriendFoto from '@/assets/Images/Post.jpg';
 import { HeartIcon, PlaneIcon } from '@/assets/Icons/InterectionIcons';
@@ -13,32 +13,31 @@ export interface StoriesModalProps {
 }
 
 const StoriesModal = ({ isOpen, onMyClose }: StoriesModalProps) => {
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
 
-  const [key, setKey] = useState(0);
+  const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
     const dialog = dialogRef.current;
-    if (!dialog) return;
+    if (dialog) {
+      let timerId: ReturnType<typeof setTimeout> | null = null;
 
-    let timerId = undefined;
-
-    if (isOpen) {
-      dialog.showModal();
-      setKey((prev) => {
-        prev + 1;
-      });
-      timerId = setTimeout(() => {
-        onMyClose();
-      }, 14000);
-    } else {
-      dialog.close();
-    }
-    return () => {
-      if (timerId) {
-        clearTimeout(timerId);
+      if (isOpen) {
+        dialog.showModal();
+        setKey((prev) => prev + 1);
+        timerId = setTimeout(() => {
+          onMyClose();
+        }, 14000);
+      } else {
+        dialog.close();
       }
-    };
+
+      return () => {
+        if (timerId) {
+          clearTimeout(timerId);
+        }
+      };
+    }
   }, [isOpen, onMyClose]);
 
   return (

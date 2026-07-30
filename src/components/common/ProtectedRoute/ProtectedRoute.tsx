@@ -2,7 +2,10 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Spinner } from '@/components/ui';
 
-const ProtectedRoute = ({ children }) => {
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { user, loading } = useAuth();
 
   if (loading) return <Spinner />;
