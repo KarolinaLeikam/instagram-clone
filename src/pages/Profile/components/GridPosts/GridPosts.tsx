@@ -2,12 +2,13 @@ import { useEffect } from 'react';
 
 import { useAuth } from '@/context/AuthContext';
 import { usePosts } from '@/context/GetAllPosts';
-import Post from './components/Post/Post';
+import Picture from './components/Post/Picture';
 import styles from './GridPosts.module.scss';
 
 const GridPosts = () => {
   const { user } = useAuth();
   const { allPostsFetch, posts } = usePosts();
+
   useEffect(() => {
     if (!user.username) return;
 
@@ -17,7 +18,7 @@ const GridPosts = () => {
   return (
     <div className={styles.grid}>
       {posts.map((post) => (
-        <Post post={post} key={post.id} />
+        <Picture post={post} key={post.id} />
       ))}
     </div>
   );

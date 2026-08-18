@@ -9,6 +9,7 @@ import Profile from '@/pages/Profile/Profile';
 import Post from '@/pages/Post/Post';
 import Login from '@/pages/Login/Login.js';
 import SignUp from '@/pages/SignUp/SignUp';
+import EditProfile from '@/pages/EditProfile/EditProfile';
 import ProtectedRoute from '@/components/common/ProtectedRoute/ProtectedRoute.js';
 import { AuthProvider } from '@/context/AuthContext';
 import { GetAllPosts } from '@/context/GetAllPosts';
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
     element: <ProtectedLayout />,
     children: [
       { path: '/main', element: <Feed /> },
+      { path: '/edit', element: <EditProfile /> },
       {
         path: '/profile',
         element: (

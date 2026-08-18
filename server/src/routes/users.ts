@@ -3,24 +3,37 @@ import { z } from 'zod';
 import { prisma } from '../lib/prisma.js';
 import { validateBody } from '../lib/validate.js';
 import { requireAuth, type AuthRequest } from '../middleware/auth.js';
+import { upload } from '../middleware/upload.js';
 
 export const usersRouter = Router();
 
 const editSchema = z.object({
   name: z.string().max(60).optional(),
   bio: z.string().max(300).optional(),
-  avatarUrl: z.string().url().optional(),
+  avatarUrl: z.string().optional(),
 });
 
 // PATCH /users/me — must come before /:username
-usersRouter.patch('/me', requireAuth, validateBody(editSchema), async (req: AuthRequest, res) => {
-  const user = await prisma.user.update({
-    where: { id: req.userId },
-    data: req.body,
-    select: { id: true, email: true, username: true, name: true, bio: true, avatarUrl: true },
-  });
-  res.json({ user });
-});
+usersRouter.patch(
+  '/me',
+  requireAuth,
+  upload.single('avatar'),
+  (req: AuthRequest, _res, next) => {
+    if (req.file) {
+      req.body.avatarUrl = `/uploads/${req.file.filename}`;
+    }
+    next();
+  },
+  validateBody(editSchema),
+  async (req: AuthRequest, res) => {
+    const user = await prisma.user.update({
+      where: { id: req.userId },
+      data: req.body,
+      select: { id: true, email: true, username: true, name: true, bio: true, avatarUrl: true },
+    });
+    res.json({ user });
+  },
+);
 
 // GET /users/:username — profile + counts + isFollowing
 usersRouter.get('/:username', requireAuth, async (req: AuthRequest, res) => {

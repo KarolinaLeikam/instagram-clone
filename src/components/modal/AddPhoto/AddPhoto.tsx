@@ -1,11 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { CrossIcon } from '@/assets/Icons/GeneralIcons';
 import { Button } from '@/components/ui';
 import { usePosts } from '@/context/GetAllPosts';
 import { type StoriesModalProps } from '../Stories/StoriesModal';
+
 import styles from './AddPhoto.module.scss';
 
-const AddPhoto = ({ isOpen, onMyClose }: StoriesModalProps) => {
+const AddPhoto = ({ isOpen, onMyClose, onFileSelected }: StoriesModalProps) => {
+  const location = useLocation();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -64,25 +67,35 @@ const AddPhoto = ({ isOpen, onMyClose }: StoriesModalProps) => {
       if (!token) {
         return;
       }
-      const formData = new FormData();
-      formData.append('images', selectedFile);
-      formData.append('caption', '');
-      const response = await fetch('http://localhost:4000/posts', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
-      if (!response.ok) {
-        throw new Error('Ошибка при загрузке поста');
+      const isProfilePage = location.pathname.includes('/profile');
+      const isEditPage = location.pathname.includes('/edit');
+      if (isProfilePage) {
+        const formData = new FormData();
+        formData.append('images', selectedFile);
+        formData.append('caption', '');
+        const response = await fetch('http://localhost:4000/posts', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        });
+        if (!response.ok) {
+          throw new Error('Ошибка при загрузке поста');
+        }
+        const data = await response.json();
+        console.log('Успешно загружено:', data);
+        allPostsFetch();
+        handleCloseModal();
       }
-      const data = await response.json();
-      console.log('Успешно загружено:', data);
-      allPostsFetch();
-      handleCloseModal();
+      if (isEditPage) {
+        if (previewUrl) {
+          onFileSelected?.(selectedFile, previewUrl);
+        }
+        onMyClose();
+      }
     } catch (err) {
       console.error(err);
     }
-  }, [allPostsFetch, handleCloseModal, selectedFile]);
+  }, [allPostsFetch, handleCloseModal, onFileSelected, onMyClose, previewUrl, selectedFile]);
 
   return (
     <dialog

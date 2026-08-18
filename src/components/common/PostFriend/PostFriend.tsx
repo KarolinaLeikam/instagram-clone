@@ -16,7 +16,6 @@ import styles from './PostFriend.module.scss';
 const PostFriend = ({ post }: { post: PostType }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const { user } = useAuth();
-  console.log(modalOpen);
 
   const location = useLocation();
   const isHideImage = location.pathname === '/main';
