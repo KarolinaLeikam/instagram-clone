@@ -35,6 +35,29 @@ usersRouter.patch(
   },
 );
 
+// GET /users/search?q= — find users to follow. MUST stay above '/:username'
+usersRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
+  const raw = String(req.query.q ?? '').trim();
+  if (!raw) return res.json([]);
+
+  // escape LIKE wildcards so '%' does not match everyone
+  const q = raw.replace(/[%_]/g, '\\$&');
+
+  const users = await prisma.user.findMany({
+    where: {
+      id: { not: req.userId },
+      OR: [
+        { username: { contains: q, mode: 'insensitive' } },
+        { name: { contains: q, mode: 'insensitive' } },
+      ],
+    },
+    select: { id: true, username: true, name: true, avatarUrl: true },
+    orderBy: { username: 'asc' },
+    take: 20,
+  });
+  res.json(users);
+});
+
 // GET /users/:username — profile + counts + isFollowing
 usersRouter.get('/:username', requireAuth, async (req: AuthRequest, res) => {
   const user = await prisma.user.findUnique({
@@ -67,24 +90,32 @@ usersRouter.get('/:username', requireAuth, async (req: AuthRequest, res) => {
   });
 });
 
-// GET /users/:username/posts — grid
-usersRouter.get('/:username/posts', requireAuth, async (req, res) => {
+// GET /users/:username/posts — grid covers + full posts (tapping the grid opens this list)
+usersRouter.get('/:username/posts', requireAuth, async (req: AuthRequest, res) => {
+  const viewerId = req.userId!;
   const user = await prisma.user.findUnique({ where: { username: req.params.username } });
   if (!user) return res.status(404).json({ error: 'User not found' });
+
   const posts = await prisma.post.findMany({
     where: { authorId: user.id },
     orderBy: { createdAt: 'desc' },
     include: {
-      images: { orderBy: { order: 'asc' }, take: 1 },
+      author: { select: { id: true, username: true, name: true, avatarUrl: true } },
+      images: { orderBy: { order: 'asc' } },
       _count: { select: { likes: true, comments: true } },
+      likes: { where: { userId: viewerId }, select: { id: true } },
     },
   });
+
   res.json(
     posts.map((p) => ({
-      id: p.id,
+      ...p,
       cover: p.images[0]?.url ?? null,
       likeCount: p._count.likes,
       commentCount: p._count.comments,
+      liked: p.likes.length > 0,
+      likes: undefined,
+      _count: undefined,
     })),
   );
 });

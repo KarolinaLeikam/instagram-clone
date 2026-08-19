@@ -265,6 +265,34 @@ export const openapiSpec = {
         responses: { 200: { description: 'OK', content: { 'application/json': { schema: { type: 'object', properties: { user: { $ref: '#/components/schemas/User' } } } } } } },
       },
     },
+    '/users/search': {
+      get: {
+        tags: ['Users'],
+        summary: 'Search users by username or name',
+        description: 'Case-insensitive substring match. Excludes the caller. Empty q returns [].',
+        parameters: [
+          {
+            name: 'q',
+            in: 'query',
+            required: true,
+            schema: { type: 'string' },
+            example: 'ali',
+            description: 'Search term',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: { type: 'array', items: { $ref: '#/components/schemas/Author' } },
+              },
+            },
+          },
+          401: { description: 'Unauthorized', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+        },
+      },
+    },
     '/users/{username}': {
       get: {
         tags: ['Users'],
@@ -279,7 +307,9 @@ export const openapiSpec = {
     '/users/{username}/posts': {
       get: {
         tags: ['Users'],
-        summary: 'User posts grid',
+        summary: 'User posts — grid covers and full post bodies',
+        description:
+          'Returns full posts newest first. `cover` is the first image, for rendering the grid; tapping a cell shows the same list as a scrollable feed.',
         parameters: [{ name: 'username', in: 'path', required: true, schema: { type: 'string' } }],
         responses: {
           200: {
@@ -289,18 +319,19 @@ export const openapiSpec = {
                 schema: {
                   type: 'array',
                   items: {
-                    type: 'object',
-                    properties: {
-                      id: { type: 'string' },
-                      cover: { type: 'string', nullable: true },
-                      likeCount: { type: 'integer' },
-                      commentCount: { type: 'integer' },
-                    },
+                    allOf: [
+                      { $ref: '#/components/schemas/Post' },
+                      {
+                        type: 'object',
+                        properties: { cover: { type: 'string', nullable: true } },
+                      },
+                    ],
                   },
                 },
               },
             },
           },
+          404: { description: 'Not found', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
         },
       },
     },
