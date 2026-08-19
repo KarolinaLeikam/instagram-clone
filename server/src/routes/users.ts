@@ -90,24 +90,32 @@ usersRouter.get('/:username', requireAuth, async (req: AuthRequest, res) => {
   });
 });
 
-// GET /users/:username/posts — grid
-usersRouter.get('/:username/posts', requireAuth, async (req, res) => {
+// GET /users/:username/posts — grid covers + full posts (tapping the grid opens this list)
+usersRouter.get('/:username/posts', requireAuth, async (req: AuthRequest, res) => {
+  const viewerId = req.userId!;
   const user = await prisma.user.findUnique({ where: { username: req.params.username } });
   if (!user) return res.status(404).json({ error: 'User not found' });
+
   const posts = await prisma.post.findMany({
     where: { authorId: user.id },
     orderBy: { createdAt: 'desc' },
     include: {
-      images: { orderBy: { order: 'asc' }, take: 1 },
+      author: { select: { id: true, username: true, name: true, avatarUrl: true } },
+      images: { orderBy: { order: 'asc' } },
       _count: { select: { likes: true, comments: true } },
+      likes: { where: { userId: viewerId }, select: { id: true } },
     },
   });
+
   res.json(
     posts.map((p) => ({
-      id: p.id,
+      ...p,
       cover: p.images[0]?.url ?? null,
       likeCount: p._count.likes,
       commentCount: p._count.comments,
+      liked: p.likes.length > 0,
+      likes: undefined,
+      _count: undefined,
     })),
   );
 });
