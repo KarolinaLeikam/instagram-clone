@@ -265,6 +265,34 @@ export const openapiSpec = {
         responses: { 200: { description: 'OK', content: { 'application/json': { schema: { type: 'object', properties: { user: { $ref: '#/components/schemas/User' } } } } } } },
       },
     },
+    '/users/search': {
+      get: {
+        tags: ['Users'],
+        summary: 'Search users by username or name',
+        description: 'Case-insensitive substring match. Excludes the caller. Empty q returns [].',
+        parameters: [
+          {
+            name: 'q',
+            in: 'query',
+            required: true,
+            schema: { type: 'string' },
+            example: 'ali',
+            description: 'Search term',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: { type: 'array', items: { $ref: '#/components/schemas/Author' } },
+              },
+            },
+          },
+          401: { description: 'Unauthorized', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+        },
+      },
+    },
     '/users/{username}': {
       get: {
         tags: ['Users'],

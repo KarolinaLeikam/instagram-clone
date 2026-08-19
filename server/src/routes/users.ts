@@ -35,6 +35,29 @@ usersRouter.patch(
   },
 );
 
+// GET /users/search?q= — find users to follow. MUST stay above '/:username'
+usersRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
+  const raw = String(req.query.q ?? '').trim();
+  if (!raw) return res.json([]);
+
+  // escape LIKE wildcards so '%' does not match everyone
+  const q = raw.replace(/[%_]/g, '\\$&');
+
+  const users = await prisma.user.findMany({
+    where: {
+      id: { not: req.userId },
+      OR: [
+        { username: { contains: q, mode: 'insensitive' } },
+        { name: { contains: q, mode: 'insensitive' } },
+      ],
+    },
+    select: { id: true, username: true, name: true, avatarUrl: true },
+    orderBy: { username: 'asc' },
+    take: 20,
+  });
+  res.json(users);
+});
+
 // GET /users/:username — profile + counts + isFollowing
 usersRouter.get('/:username', requireAuth, async (req: AuthRequest, res) => {
   const user = await prisma.user.findUnique({
