@@ -10,7 +10,6 @@ import styles from './StoriesModal.module.scss';
 export interface StoriesModalProps {
   isOpen: boolean;
   onMyClose: () => void;
-  onFileSelected?: (file: File, previewUrl: string) => void;
 }
 
 const StoriesModal = ({ isOpen, onMyClose }: StoriesModalProps) => {

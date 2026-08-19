@@ -7,7 +7,15 @@ import { type StoriesModalProps } from '../Stories/StoriesModal';
 
 import styles from './AddPhoto.module.scss';
 
-const AddPhoto = ({ isOpen, onMyClose, onFileSelected }: StoriesModalProps) => {
+interface AllModalProps extends StoriesModalProps {
+  onFileSelected?: (file: File, previewUrl: string) => void;
+}
+
+const AddPhoto = ({
+  isOpen,
+  onMyClose,
+  onFileSelected = undefined,
+}: AllModalProps) => {
   const location = useLocation();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -95,7 +103,15 @@ const AddPhoto = ({ isOpen, onMyClose, onFileSelected }: StoriesModalProps) => {
     } catch (err) {
       console.error(err);
     }
-  }, [allPostsFetch, handleCloseModal, onFileSelected, onMyClose, previewUrl, selectedFile]);
+  }, [
+    allPostsFetch,
+    handleCloseModal,
+    onFileSelected,
+    onMyClose,
+    previewUrl,
+    selectedFile,
+    location,
+  ]);
 
   return (
     <dialog
@@ -120,7 +136,6 @@ const AddPhoto = ({ isOpen, onMyClose, onFileSelected }: StoriesModalProps) => {
           )}
           {previewUrl && (
             <div className={styles.previewContainer}>
-              {/* В src будет та самая ссылка, которую вы не хотите видеть, но без неё img не покажет файл */}
               <img
                 src={previewUrl}
                 alt="preview"

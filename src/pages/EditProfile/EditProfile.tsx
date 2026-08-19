@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -40,32 +39,19 @@ const EditProfile = () => {
       return;
     }
     try {
-      let response: Response;
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('bio', data.bio);
       if (avatarFile) {
-        const formData = new FormData();
-        formData.append('name', data.name);
-        formData.append('bio', data.bio);
         formData.append('avatar', avatarFile);
-        response = await fetch('http://localhost:4000/users/me', {
-          method: 'PATCH',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        });
-      } else {
-        response = await fetch('http://localhost:4000/users/me', {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            name: data.name,
-            bio: data.bio,
-          }),
-        });
       }
+      const response = await fetch('http://localhost:4000/users/me', {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
 
       const result = await response.json();
       setUser(result.user ?? result);
@@ -95,6 +81,7 @@ const EditProfile = () => {
           alt=""
         />
         <button
+          type="button"
           onClick={() => setIsModalOpen(true)}
           className={styles.editPhoto}
         >
@@ -110,25 +97,25 @@ const EditProfile = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <hr></hr>
           <div>
-            <label>
+            <label htmlFor="nameInput">
               Name:
-              <input {...register('name')} />
+              <input id="nameInput" {...register('name')} />
             </label>
           </div>
           <hr></hr>
           <div>
             {' '}
-            <label>
+            <label htmlFor="userInput">
               Username:
-              <input {...register('username')} />
+              <input id="userInput" {...register('username')} />
             </label>
           </div>
           <hr></hr>
           <div>
             {' '}
-            <label>
+            <label htmlFor="bioInput">
               Bio:
-              <input {...register('bio')} />
+              <input id="bioInput" {...register('bio')} />
             </label>
           </div>
           <hr></hr>

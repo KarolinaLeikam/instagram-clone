@@ -23,17 +23,12 @@ interface LoginForm {
   age: string;
 }
 
-type Handler<T> = (data: T) => {
-  data: T;
-  status: number;
-};
-
 const Login = () => {
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<LoginForm>({
     mode: 'onChange',
     defaultValues: {
@@ -42,7 +37,7 @@ const Login = () => {
     },
   });
 
-  const onSubmit: Handler<LoginForm> = async (
+  const onSubmit: SubmitHandler<LoginForm> = async (
     data: LoginForm
   ): Promise<void> => {
     try {

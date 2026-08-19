@@ -38,7 +38,12 @@ const Post = () => {
       <HeaderPublication />
       <div className={styles.content}>
         {posts.map((post) => (
-          <div key={post.id} ref={(el) => (postRefs.current[post.id] = el)}>
+          <div
+            key={post.id}
+            ref={(el) => {
+              postRefs.current[post.id] = el;
+            }}
+          >
             <PostFriend post={post} />
           </div>
         ))}

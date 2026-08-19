@@ -1,5 +1,6 @@
 import {
   useCallback,
+  useMemo,
   useContext,
   createContext,
   type ReactNode,
@@ -49,10 +50,15 @@ export const GetAllPosts = ({ children }: { children: ReactNode }) => {
     }
   }, [username]);
 
+  const value = useMemo(
+    () => ({
+      allPostsFetch,
+      posts,
+    }),
+    [allPostsFetch, posts]
+  );
   return (
-    <PostsContext.Provider value={{ allPostsFetch, posts }}>
-      {children}
-    </PostsContext.Provider>
+    <PostsContext.Provider value={value}>{children}</PostsContext.Provider>
   );
 };
 

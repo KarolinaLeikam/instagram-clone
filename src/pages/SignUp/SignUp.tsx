@@ -10,6 +10,7 @@ import AuthInput from '@/components/common/AuthInput/AuthInput';
 import { useState } from 'react';
 import { emailRegex, passwordRegex, userRegex } from '@/utils/validation';
 import styles from './SignUp.module.scss';
+
 export interface FormInput {
   mail: string;
   fullName: string;
@@ -127,7 +128,12 @@ const SignUp = () => {
             <EyeIcon className={styles.icons} onClick={togglePassword} />
           )}
         </div>
-        <input type="submit" value="Sign up" disabled={!isValid} className={styles.button} />
+        <input
+          type="submit"
+          value="Sign up"
+          disabled={!isValid}
+          className={styles.button}
+        />
       </form>
       <div className={styles.layoutText}>
         <p>Have an account?</p>

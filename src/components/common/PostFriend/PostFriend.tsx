@@ -1,4 +1,3 @@
-import FriendFoto from '@/assets/Images/Post.jpg';
 import { useAuth } from '@/context/AuthContext';
 import {
   BookMarkIcon,
@@ -23,7 +22,11 @@ const PostFriend = ({ post }: { post: PostType }) => {
     <div className={styles.container}>
       <div className={styles.containerHeader}>
         <div className={styles.containerAvatarName}>
-          <img className={styles.friendAvatar} src={FriendFoto} alt="" />
+          <img
+            className={styles.friendAvatar}
+            src={`http://localhost:4000${user.avatarUrl}`}
+            alt=""
+          />
           <h3>{user.username}</h3>
         </div>
         <MenuDotsIcon onClick={() => setModalOpen(true)} />
