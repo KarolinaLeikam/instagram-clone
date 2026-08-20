@@ -18,7 +18,9 @@ const Footer = () => {
           <HomeIcon />
         </Link>
         <PlayAltIcon />
-        <SearchIcon />
+        <Link to="/search">
+          <SearchIcon />
+        </Link>
         <ShopBagIcon />
         <Link to="/profile">
           <div className={styles.circle}>

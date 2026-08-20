@@ -21,7 +21,7 @@ const AddPhoto = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
+  const [caption, setCaption] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const { allPostsFetch } = usePosts();
@@ -64,6 +64,9 @@ const AddPhoto = ({
     onMyClose();
   }, [previewUrl, onMyClose]);
 
+  const isProfilePage = location.pathname.includes('/profile');
+  const isEditPage = location.pathname.includes('/edit');
+
   const fetchPost = useCallback(async () => {
     if (!selectedFile) {
       alert('Сначала выберите фото!');
@@ -75,12 +78,14 @@ const AddPhoto = ({
       if (!token) {
         return;
       }
-      const isProfilePage = location.pathname.includes('/profile');
-      const isEditPage = location.pathname.includes('/edit');
+
       if (isProfilePage) {
         const formData = new FormData();
         formData.append('images', selectedFile);
-        formData.append('caption', '');
+        if (caption) {
+          formData.append('caption', caption);
+        }
+
         const response = await fetch('http://localhost:4000/posts', {
           method: 'POST',
           headers: { Authorization: `Bearer ${token}` },
@@ -110,9 +115,12 @@ const AddPhoto = ({
     onMyClose,
     previewUrl,
     selectedFile,
-    location,
+    isEditPage,
+    isProfilePage,
+    caption,
   ]);
 
+  console.log(caption);
   return (
     <dialog
       ref={dialogRef}
@@ -141,6 +149,14 @@ const AddPhoto = ({
                 alt="preview"
                 className={styles.previewImg}
               />
+              {isProfilePage && (
+                <div>
+                  <textarea
+                    placeholder="Добавить описание..."
+                    onChange={(e) => setCaption(e.target.value)}
+                  />
+                </div>
+              )}
               <Button onClick={fetchPost}>Загрузить фото</Button>
             </div>
           )}

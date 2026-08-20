@@ -61,7 +61,7 @@ const PostFriend = ({ post }: { post: PostType }) => {
       <h3 className={styles.likes}>33 Likes</h3>
       <div className={styles.text}>
         <h3>{user.username}</h3>
-        <p>hello world</p>
+        <p>{post.caption}</p>
       </div>
     </div>
   );

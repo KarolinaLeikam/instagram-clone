@@ -10,6 +10,7 @@ import Post from '@/pages/Post/Post';
 import Login from '@/pages/Login/Login.js';
 import SignUp from '@/pages/SignUp/SignUp';
 import EditProfile from '@/pages/EditProfile/EditProfile';
+import SearchUsers from '@/pages/SearchUsers/SearchUsers.js';
 import ProtectedRoute from '@/components/common/ProtectedRoute/ProtectedRoute.js';
 import { AuthProvider } from '@/context/AuthContext';
 import { GetAllPosts } from '@/context/GetAllPosts';
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
     children: [
       { path: '/main', element: <Feed /> },
       { path: '/edit', element: <EditProfile /> },
+      { path: '/search', element: <SearchUsers /> },
       {
         path: '/profile',
         element: (

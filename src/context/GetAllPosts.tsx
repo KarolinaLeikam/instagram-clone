@@ -13,6 +13,7 @@ export interface PostType {
   cover: string;
   likeCound: number;
   commentCount: number;
+  caption: string;
 }
 
 interface ContextType {
@@ -37,12 +38,9 @@ export const GetAllPosts = ({ children }: { children: ReactNode }) => {
       if (!token) {
         return;
       }
-      const response = await fetch(
-        `http://localhost:4000/users/${username}/posts`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await fetch(`http://host:4000/users/${username}/posts`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await response.json();
       setPosts(data);
     } catch (error) {
@@ -57,6 +55,8 @@ export const GetAllPosts = ({ children }: { children: ReactNode }) => {
     }),
     [allPostsFetch, posts]
   );
+
+  console.log(posts);
   return (
     <PostsContext.Provider value={value}>{children}</PostsContext.Provider>
   );

@@ -24,9 +24,7 @@ const Feed = () => {
         </button>
         <HeaderFeed />
         <StoriesHeader />
-        <div className={styles.postsContainer}>
-          <PostFriend />
-        </div>
+        <div className={styles.postsContainer}></div>
       </div>
       <div className={styles.footer}>
         <Footer />
