@@ -46,10 +46,8 @@ usersRouter.get('/search', requireAuth, async (req: AuthRequest, res) => {
   const users = await prisma.user.findMany({
     where: {
       id: { not: req.userId },
-      OR: [
-        { username: { contains: q, mode: 'insensitive' } },
-        { name: { contains: q, mode: 'insensitive' } },
-      ],
+      // SQLite has no `mode: 'insensitive'`; its LIKE is already ASCII-insensitive.
+      OR: [{ username: { contains: q } }, { name: { contains: q } }],
     },
     select: { id: true, username: true, name: true, avatarUrl: true },
     orderBy: { username: 'asc' },
