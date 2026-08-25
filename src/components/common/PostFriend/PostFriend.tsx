@@ -24,10 +24,10 @@ const PostFriend = ({ post }: { post: PostType }) => {
         <div className={styles.containerAvatarName}>
           <img
             className={styles.friendAvatar}
-            src={`http://localhost:4000${user.avatarUrl}`}
+            src={`http://localhost:4000${user?.avatarUrl}`}
             alt=""
           />
-          <h3>{user.username}</h3>
+          <h3>{user?.username}</h3>
         </div>
         <MenuDotsIcon onClick={() => setModalOpen(true)} />
         <MenuPhoto
@@ -60,7 +60,7 @@ const PostFriend = ({ post }: { post: PostType }) => {
       </div>
       <h3 className={styles.likes}>33 Likes</h3>
       <div className={styles.text}>
-        <h3>{user.username}</h3>
+        <h3>{user?.username}</h3>
         <p>{post.caption}</p>
       </div>
     </div>

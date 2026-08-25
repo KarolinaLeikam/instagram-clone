@@ -26,7 +26,7 @@ const Footer = () => {
           <div className={styles.circle}>
             <img
               className={styles.AvatarImg}
-              src={`http://localhost:4000${user.avatarUrl}`}
+              src={`http://localhost:4000${user?.avatarUrl}`}
               alt=""
             />
           </div>

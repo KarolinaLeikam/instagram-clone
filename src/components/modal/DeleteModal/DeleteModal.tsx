@@ -17,7 +17,7 @@ const DeleteModal = ({ isOpen, onCancel, post }: Props) => {
   const { user } = useAuth();
 
   const handleDeletePost = async () => {
-    if (!user.username) return;
+    if (!user?.username) return;
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:4000/posts/${post.id}`, {

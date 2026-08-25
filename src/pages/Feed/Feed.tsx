@@ -1,7 +1,6 @@
 import HeaderFeed from '@/pages/Feed/components/HeaderFeed/HeaderFeed';
 import Footer from '@/components/common/Footer/Footer';
 import StatusBar from '@/components/common/StatusBar/StatusBar';
-import PostFriend from '@/components/common/PostFriend/PostFriend';
 import StoriesHeader from '@/pages/Feed/components/StoriesHeader/StoriesHeader';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';

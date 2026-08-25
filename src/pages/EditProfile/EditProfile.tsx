@@ -22,9 +22,9 @@ const EditProfile = () => {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const { register, handleSubmit } = useForm<IFormValues>({
     defaultValues: {
-      username: user.username,
-      name: user.name,
-      bio: user.bio,
+      username: user?.username,
+      name: user?.name,
+      bio: user?.bio,
     },
   });
 
@@ -74,8 +74,8 @@ const EditProfile = () => {
           className={styles.avatar}
           src={
             avatarPreview ||
-            (user.avatarUrl
-              ? `http://localhost:4000${user.avatarUrl}`
+            (user?.avatarUrl
+              ? `http://localhost:4000${user?.avatarUrl}`
               : AvatarImg)
           }
           alt=""

@@ -1,4 +1,3 @@
-import AvatarImg from '@/assets/Images/Avatar.jpg';
 import { useParams } from 'react-router-dom';
 import { PlusSmallIcon } from '@/assets/Icons/GeneralIcons';
 import { useAuth } from '@/context/AuthContext';

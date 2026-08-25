@@ -11,7 +11,7 @@ const HeaderPublication = () => {
         <AngleLeftIcon />
       </Link>
       <div className={styles.layoutText}>
-        <p>{user.username}</p>
+        <p>{user?.username}</p>
         <h2>Publications</h2>
       </div>
     </div>
