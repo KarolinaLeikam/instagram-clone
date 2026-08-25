@@ -15,7 +15,7 @@ export interface StoriesModalProps {
 const StoriesModal = ({ isOpen, onMyClose }: StoriesModalProps) => {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
-  const [key, setKey] = useState<number>(0);
+  const [_, setKey] = useState<number>(0);
 
   // eslint-disable-next-line consistent-return
   useEffect(() => {
