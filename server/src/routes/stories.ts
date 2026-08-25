@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { prisma } from '../lib/prisma.js';
+import prisma from '../lib/prisma.js';
 import { requireAuth, type AuthRequest } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
 
-export const storiesRouter = Router();
+const storiesRouter = Router();
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -21,17 +21,26 @@ storiesRouter.get('/', requireAuth, async (req: AuthRequest, res) => {
     where: { authorId: { in: authorIds }, createdAt: { gte: since } },
     orderBy: { createdAt: 'desc' },
     include: {
-      author: { select: { id: true, username: true, name: true, avatarUrl: true } },
+      author: {
+        select: { id: true, username: true, name: true, avatarUrl: true },
+      },
     },
   });
-  res.json(stories);
+  return res.json(stories);
 });
 
-storiesRouter.post('/', requireAuth, upload.single('image'), async (req: AuthRequest, res) => {
-  const file = req.file as Express.Multer.File | undefined;
-  if (!file) return res.status(400).json({ error: 'Image required' });
-  const story = await prisma.story.create({
-    data: { authorId: req.userId!, imageUrl: `/uploads/${file.filename}` },
-  });
-  res.status(201).json(story);
-});
+storiesRouter.post(
+  '/',
+  requireAuth,
+  upload.single('image'),
+  async (req: AuthRequest, res) => {
+    const { file } = req;
+    if (!file) return res.status(400).json({ error: 'Image required' });
+    const story = await prisma.story.create({
+      data: { authorId: req.userId!, imageUrl: `/uploads/${file.filename}` },
+    });
+    return res.status(201).json(story);
+  }
+);
+
+export default storiesRouter;

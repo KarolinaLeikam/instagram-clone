@@ -1,9 +1,10 @@
-export const openapiSpec = {
+const openapiSpec = {
   openapi: '3.0.3',
   info: {
     title: 'Instagram Clone API',
     version: '1.0.0',
-    description: 'Backend for the Instagram clone. Seed users password: password123',
+    description:
+      'Backend for the Instagram clone. Seed users password: password123',
   },
   servers: [{ url: 'http://localhost:4000' }],
   components: {
@@ -54,7 +55,10 @@ export const openapiSpec = {
           caption: { type: 'string', nullable: true },
           createdAt: { type: 'string', format: 'date-time' },
           author: { $ref: '#/components/schemas/Author' },
-          images: { type: 'array', items: { $ref: '#/components/schemas/PostImage' } },
+          images: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/PostImage' },
+          },
           likeCount: { type: 'integer' },
           commentCount: { type: 'integer' },
           liked: { type: 'boolean' },
@@ -121,8 +125,22 @@ export const openapiSpec = {
           },
         },
         responses: {
-          201: { description: 'Created', content: { 'application/json': { schema: { $ref: '#/components/schemas/AuthResponse' } } } },
-          409: { description: 'Email or username taken', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+          201: {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/AuthResponse' },
+              },
+            },
+          },
+          409: {
+            description: 'Email or username taken',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Error' },
+              },
+            },
+          },
         },
       },
     },
@@ -147,8 +165,22 @@ export const openapiSpec = {
           },
         },
         responses: {
-          200: { description: 'OK', content: { 'application/json': { schema: { $ref: '#/components/schemas/AuthResponse' } } } },
-          401: { description: 'Invalid credentials', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+          200: {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/AuthResponse' },
+              },
+            },
+          },
+          401: {
+            description: 'Invalid credentials',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Error' },
+              },
+            },
+          },
         },
       },
     },
@@ -157,7 +189,17 @@ export const openapiSpec = {
         tags: ['Auth'],
         summary: 'Current user',
         responses: {
-          200: { description: 'OK', content: { 'application/json': { schema: { type: 'object', properties: { user: { $ref: '#/components/schemas/User' } } } } } },
+          200: {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: { user: { $ref: '#/components/schemas/User' } },
+                },
+              },
+            },
+          },
           401: { description: 'Unauthorized' },
         },
       },
@@ -167,7 +209,17 @@ export const openapiSpec = {
         tags: ['Posts'],
         summary: 'Feed (followed users + self)',
         responses: {
-          200: { description: 'OK', content: { 'application/json': { schema: { type: 'array', items: { $ref: '#/components/schemas/Post' } } } } },
+          200: {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: { $ref: '#/components/schemas/Post' },
+                },
+              },
+            },
+          },
         },
       },
     },
@@ -182,7 +234,10 @@ export const openapiSpec = {
               schema: {
                 type: 'object',
                 properties: {
-                  images: { type: 'array', items: { type: 'string', format: 'binary' } },
+                  images: {
+                    type: 'array',
+                    items: { type: 'string', format: 'binary' },
+                  },
                   caption: { type: 'string' },
                 },
               },
@@ -190,7 +245,14 @@ export const openapiSpec = {
           },
         },
         responses: {
-          201: { description: 'Created', content: { 'application/json': { schema: { $ref: '#/components/schemas/Post' } } } },
+          201: {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Post' },
+              },
+            },
+          },
           400: { description: 'No image' },
         },
       },
@@ -199,49 +261,161 @@ export const openapiSpec = {
       get: {
         tags: ['Posts'],
         summary: 'Get post',
-        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
         responses: {
-          200: { description: 'OK', content: { 'application/json': { schema: { $ref: '#/components/schemas/Post' } } } },
+          200: {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Post' },
+              },
+            },
+          },
           404: { description: 'Not found' },
         },
       },
       delete: {
         tags: ['Posts'],
         summary: 'Delete own post',
-        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
-        responses: { 204: { description: 'Deleted' }, 403: { description: 'Forbidden' }, 404: { description: 'Not found' } },
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {
+          204: { description: 'Deleted' },
+          403: { description: 'Forbidden' },
+          404: { description: 'Not found' },
+        },
       },
     },
     '/posts/{id}/like': {
       post: {
         tags: ['Posts'],
         summary: 'Like post',
-        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
-        responses: { 200: { description: 'OK', content: { 'application/json': { schema: { type: 'object', properties: { liked: { type: 'boolean' }, likeCount: { type: 'integer' } } } } } } },
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    liked: { type: 'boolean' },
+                    likeCount: { type: 'integer' },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
       delete: {
         tags: ['Posts'],
         summary: 'Unlike post',
-        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
-        responses: { 200: { description: 'OK', content: { 'application/json': { schema: { type: 'object', properties: { liked: { type: 'boolean' }, likeCount: { type: 'integer' } } } } } } },
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    liked: { type: 'boolean' },
+                    likeCount: { type: 'integer' },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     },
     '/posts/{id}/comments': {
       get: {
         tags: ['Posts'],
         summary: 'List comments',
-        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
-        responses: { 200: { description: 'OK', content: { 'application/json': { schema: { type: 'array', items: { $ref: '#/components/schemas/Comment' } } } } } },
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: { $ref: '#/components/schemas/Comment' },
+                },
+              },
+            },
+          },
+        },
       },
       post: {
         tags: ['Posts'],
         summary: 'Add comment',
-        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
         requestBody: {
           required: true,
-          content: { 'application/json': { schema: { type: 'object', required: ['text'], properties: { text: { type: 'string' } } } } },
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['text'],
+                properties: { text: { type: 'string' } },
+              },
+            },
+          },
         },
-        responses: { 201: { description: 'Created', content: { 'application/json': { schema: { $ref: '#/components/schemas/Comment' } } } } },
+        responses: {
+          201: {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Comment' },
+              },
+            },
+          },
+        },
       },
     },
     '/users/me': {
@@ -262,14 +436,27 @@ export const openapiSpec = {
             },
           },
         },
-        responses: { 200: { description: 'OK', content: { 'application/json': { schema: { type: 'object', properties: { user: { $ref: '#/components/schemas/User' } } } } } } },
+        responses: {
+          200: {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: { user: { $ref: '#/components/schemas/User' } },
+                },
+              },
+            },
+          },
+        },
       },
     },
     '/users/search': {
       get: {
         tags: ['Users'],
         summary: 'Search users by username or name',
-        description: 'Case-insensitive substring match. Excludes the caller. Empty q returns [].',
+        description:
+          'Case-insensitive substring match. Excludes the caller. Empty q returns [].',
         parameters: [
           {
             name: 'q',
@@ -285,11 +472,21 @@ export const openapiSpec = {
             description: 'OK',
             content: {
               'application/json': {
-                schema: { type: 'array', items: { $ref: '#/components/schemas/Author' } },
+                schema: {
+                  type: 'array',
+                  items: { $ref: '#/components/schemas/Author' },
+                },
               },
             },
           },
-          401: { description: 'Unauthorized', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+          401: {
+            description: 'Unauthorized',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Error' },
+              },
+            },
+          },
         },
       },
     },
@@ -297,9 +494,23 @@ export const openapiSpec = {
       get: {
         tags: ['Users'],
         summary: 'Profile + counts',
-        parameters: [{ name: 'username', in: 'path', required: true, schema: { type: 'string' } }],
+        parameters: [
+          {
+            name: 'username',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
         responses: {
-          200: { description: 'OK', content: { 'application/json': { schema: { $ref: '#/components/schemas/Profile' } } } },
+          200: {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Profile' },
+              },
+            },
+          },
           404: { description: 'Not found' },
         },
       },
@@ -310,7 +521,14 @@ export const openapiSpec = {
         summary: 'User posts — grid covers and full post bodies',
         description:
           'Returns full posts newest first. `cover` is the first image, for rendering the grid; tapping a cell shows the same list as a scrollable feed.',
-        parameters: [{ name: 'username', in: 'path', required: true, schema: { type: 'string' } }],
+        parameters: [
+          {
+            name: 'username',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
         responses: {
           200: {
             description: 'OK',
@@ -323,7 +541,9 @@ export const openapiSpec = {
                       { $ref: '#/components/schemas/Post' },
                       {
                         type: 'object',
-                        properties: { cover: { type: 'string', nullable: true } },
+                        properties: {
+                          cover: { type: 'string', nullable: true },
+                        },
                       },
                     ],
                   },
@@ -331,7 +551,14 @@ export const openapiSpec = {
               },
             },
           },
-          404: { description: 'Not found', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+          404: {
+            description: 'Not found',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Error' },
+              },
+            },
+          },
         },
       },
     },
@@ -339,31 +566,99 @@ export const openapiSpec = {
       post: {
         tags: ['Users'],
         summary: 'Follow user',
-        parameters: [{ name: 'username', in: 'path', required: true, schema: { type: 'string' } }],
-        responses: { 200: { description: 'OK', content: { 'application/json': { schema: { type: 'object', properties: { isFollowing: { type: 'boolean' } } } } } } },
+        parameters: [
+          {
+            name: 'username',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: { isFollowing: { type: 'boolean' } },
+                },
+              },
+            },
+          },
+        },
       },
       delete: {
         tags: ['Users'],
         summary: 'Unfollow user',
-        parameters: [{ name: 'username', in: 'path', required: true, schema: { type: 'string' } }],
-        responses: { 200: { description: 'OK', content: { 'application/json': { schema: { type: 'object', properties: { isFollowing: { type: 'boolean' } } } } } } },
+        parameters: [
+          {
+            name: 'username',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: { isFollowing: { type: 'boolean' } },
+                },
+              },
+            },
+          },
+        },
       },
     },
     '/stories': {
       get: {
         tags: ['Stories'],
         summary: 'Active stories (<24h) from followed + self',
-        responses: { 200: { description: 'OK', content: { 'application/json': { schema: { type: 'array', items: { $ref: '#/components/schemas/Story' } } } } } },
+        responses: {
+          200: {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: { $ref: '#/components/schemas/Story' },
+                },
+              },
+            },
+          },
+        },
       },
       post: {
         tags: ['Stories'],
         summary: 'Create story (multipart image)',
         requestBody: {
           required: true,
-          content: { 'multipart/form-data': { schema: { type: 'object', properties: { image: { type: 'string', format: 'binary' } } } } },
+          content: {
+            'multipart/form-data': {
+              schema: {
+                type: 'object',
+                properties: { image: { type: 'string', format: 'binary' } },
+              },
+            },
+          },
         },
-        responses: { 201: { description: 'Created', content: { 'application/json': { schema: { $ref: '#/components/schemas/Story' } } } } },
+        responses: {
+          201: {
+            description: 'Created',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Story' },
+              },
+            },
+          },
+        },
       },
     },
   },
 } as const;
+
+export default openapiSpec;

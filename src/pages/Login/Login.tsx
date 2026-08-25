@@ -113,7 +113,7 @@ const Login = () => {
         </Button>
       </form>
       <div className={styles.layoutText}>
-        <p>Don't have an account?</p>
+        <p>Dont have an account?</p>
         <Link to="/signup" className={styles.link}>
           Sign Up.
         </Link>

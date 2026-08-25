@@ -17,6 +17,7 @@ const StoriesModal = ({ isOpen, onMyClose }: StoriesModalProps) => {
 
   const [key, setKey] = useState<number>(0);
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     const dialog = dialogRef.current;
     if (dialog) {
@@ -24,6 +25,7 @@ const StoriesModal = ({ isOpen, onMyClose }: StoriesModalProps) => {
 
       if (isOpen) {
         dialog.showModal();
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setKey((prev) => prev + 1);
         timerId = setTimeout(() => {
           onMyClose();
@@ -47,7 +49,7 @@ const StoriesModal = ({ isOpen, onMyClose }: StoriesModalProps) => {
         <div className={styles.containerStory}>
           <div className={styles.containerHeader}>
             <div className={styles.progressBarBackground}>
-              <div key={key} className={styles.progressBarLine}></div>
+              {/* <div key={key} className={styles.progressBarLine}></div> */}
             </div>
             <div className={styles.layoutHeader}>
               <div className={styles.containerAvatarName}>

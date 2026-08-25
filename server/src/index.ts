@@ -1,11 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
-import { openapiSpec } from './openapi.js';
-import { authRouter } from './routes/auth.js';
-import { postsRouter } from './routes/posts.js';
-import { usersRouter } from './routes/users.js';
-import { storiesRouter } from './routes/stories.js';
+import openapiSpec from './openapi.js';
+import authRouter from './routes/auth.js';
+import postsRouter from './routes/posts.js';
+import usersRouter from './routes/users.js';
+import storiesRouter from './routes/stories.js';
 import { UPLOADS_PATH } from './middleware/upload.js';
 
 const app = express();

@@ -6,12 +6,12 @@ interface StoryFriendProps {
 }
 
 const StoryFriend = ({ onClick }: StoryFriendProps) => (
-  <div className={styles.layout} onClick={onClick}>
+  <button type="button" className={styles.layout} onClick={onClick}>
     <div className={styles.circle}>
       <img src={AvatarImg} alt="" />
     </div>
     <p>FriendName</p>
-  </div>
+  </button>
 );
 
 export default StoryFriend;

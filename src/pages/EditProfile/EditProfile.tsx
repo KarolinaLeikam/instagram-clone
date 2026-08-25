@@ -95,14 +95,14 @@ const EditProfile = () => {
       </div>
       <div className={styles.form}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <hr></hr>
+          <hr />
           <div>
             <label htmlFor="nameInput">
               Name:
               <input id="nameInput" {...register('name')} />
             </label>
           </div>
-          <hr></hr>
+          <hr />
           <div>
             {' '}
             <label htmlFor="userInput">
@@ -110,7 +110,7 @@ const EditProfile = () => {
               <input id="userInput" {...register('username')} />
             </label>
           </div>
-          <hr></hr>
+          <hr />
           <div>
             {' '}
             <label htmlFor="bioInput">
@@ -118,7 +118,7 @@ const EditProfile = () => {
               <input id="bioInput" {...register('bio')} />
             </label>
           </div>
-          <hr></hr>
+          <hr />
           <input type="submit" />
         </form>
       </div>

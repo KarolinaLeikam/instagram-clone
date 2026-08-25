@@ -19,36 +19,36 @@ const SearchUsers = () => {
   console.log(user);
 
   useEffect(() => {
-    if (!searchResult.trim()) {
-      console.log('problem');
-      setUser([]);
-      return;
-    }
-    const fetchSearch = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) return;
-      try {
-        const response = await fetch(
-          `http://localhost:4000/users/search?q=${encodeURIComponent(searchResult)}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (response.ok) {
-          const result = await response.json();
-          setUser(result);
-        }
-      } catch (err) {
-        console.log(err);
+    const timeoutId = setTimeout(() => {
+      if (!searchResult.trim()) {
+        setUser([]);
+        return;
       }
-    };
-    setTimeout(() => {
+      const fetchSearch = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+        try {
+          const response = await fetch(
+            `http://localhost:4000/users/search?q=${encodeURIComponent(searchResult)}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (response.ok) {
+            const result = await response.json();
+            setUser(result);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
       fetchSearch();
     }, 700);
+    return () => clearTimeout(timeoutId);
   }, [searchResult]);
 
   return (

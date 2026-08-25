@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { z } from 'zod';
-import { prisma } from '../lib/prisma.js';
-import { validateBody } from '../lib/validate.js';
+import prisma from '../lib/prisma.js';
+import validateBody from '../lib/validate.js';
 import { requireAuth, type AuthRequest } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
 
-export const postsRouter = Router();
+const postsRouter = Router();
 
 const authorSelect = {
   id: true,
@@ -65,43 +65,53 @@ postsRouter.get('/feed', requireAuth, async (req: AuthRequest, res) => {
       liked: p.likes.length > 0,
       likes: undefined,
       _count: undefined,
-    })),
+    }))
   );
 });
 
 postsRouter.get('/:id', requireAuth, async (req: AuthRequest, res) => {
   const post = await serializePost(req.params.id, req.userId!);
   if (!post) return res.status(404).json({ error: 'Post not found' });
-  res.json(post);
+  return res.json(post);
 });
 
 // POST /posts — multipart: images[] + caption
-postsRouter.post('/', requireAuth, upload.array('images', 10), async (req: AuthRequest, res) => {
-  const files = (req.files as Express.Multer.File[]) ?? [];
-  if (files.length === 0) {
-    return res.status(400).json({ error: 'At least one image required' });
-  }
-  const caption = typeof req.body.caption === 'string' ? req.body.caption : null;
+postsRouter.post(
+  '/',
+  requireAuth,
+  upload.array('images', 10),
+  async (req: AuthRequest, res) => {
+    const files = (req.files as Express.Multer.File[]) ?? [];
+    if (files.length === 0) {
+      return res.status(400).json({ error: 'At least one image required' });
+    }
+    const caption =
+      typeof req.body.caption === 'string' ? req.body.caption : null;
 
-  const post = await prisma.post.create({
-    data: {
-      authorId: req.userId!,
-      caption,
-      images: {
-        create: files.map((f, i) => ({ url: `/uploads/${f.filename}`, order: i })),
+    const post = await prisma.post.create({
+      data: {
+        authorId: req.userId!,
+        caption,
+        images: {
+          create: files.map((f, i) => ({
+            url: `/uploads/${f.filename}`,
+            order: i,
+          })),
+        },
       },
-    },
-  });
-  const full = await serializePost(post.id, req.userId!);
-  res.status(201).json(full);
-});
+    });
+    const full = await serializePost(post.id, req.userId!);
+    return res.status(201).json(full);
+  }
+);
 
 postsRouter.delete('/:id', requireAuth, async (req: AuthRequest, res) => {
   const post = await prisma.post.findUnique({ where: { id: req.params.id } });
   if (!post) return res.status(404).json({ error: 'Post not found' });
-  if (post.authorId !== req.userId) return res.status(403).json({ error: 'Forbidden' });
+  if (post.authorId !== req.userId)
+    return res.status(403).json({ error: 'Forbidden' });
   await prisma.post.delete({ where: { id: post.id } });
-  res.status(204).end();
+  return res.status(204).end();
 });
 
 // likes
@@ -148,6 +158,8 @@ postsRouter.post(
       data: { postId: post.id, authorId: req.userId!, text: req.body.text },
       include: { author: { select: authorSelect } },
     });
-    res.status(201).json(comment);
-  },
+    return res.status(201).json(comment);
+  }
 );
+
+export default postsRouter;

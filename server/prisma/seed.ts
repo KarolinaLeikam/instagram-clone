@@ -18,19 +18,32 @@ async function main() {
   const passwordHash = await bcrypt.hash('password123', 10);
 
   const usersData = [
-    { email: 'alice@test.com', username: 'alice', name: 'Alice', bio: 'photographer' },
+    {
+      email: 'alice@test.com',
+      username: 'alice',
+      name: 'Alice',
+      bio: 'photographer',
+    },
     { email: 'bob@test.com', username: 'bob', name: 'Bob', bio: 'traveler' },
-    { email: 'carol@test.com', username: 'carol', name: 'Carol', bio: 'foodie' },
+    {
+      email: 'carol@test.com',
+      username: 'carol',
+      name: 'Carol',
+      bio: 'foodie',
+    },
   ];
 
-  const users = [];
-  for (const u of usersData) {
-    users.push(
-      await prisma.user.create({
-        data: { ...u, passwordHash, avatarUrl: `${IMG}/${u.username}-avatar/150` },
-      }),
-    );
-  }
+  const users = await Promise.all(
+    usersData.map((u) =>
+      prisma.user.create({
+        data: {
+          ...u,
+          passwordHash,
+          avatarUrl: `${IMG}/${u.username}-avatar/150`,
+        },
+      })
+    )
+  );
   const [alice, bob, carol] = users;
 
   // follows: alice <-> bob, alice -> carol
@@ -43,34 +56,38 @@ async function main() {
   });
 
   // posts (2 each, one with carousel)
-  for (const user of users) {
-    for (let i = 0; i < 2; i++) {
-      await prisma.post.create({
-        data: {
-          authorId: user.id,
-          caption: `${user.username} post ${i + 1}`,
-          images: {
-            create:
-              i === 0
-                ? [
-                    { url: `${IMG}/${user.username}-${i}-a/600`, order: 0 },
-                    { url: `${IMG}/${user.username}-${i}-b/600`, order: 1 },
-                  ]
-                : [{ url: `${IMG}/${user.username}-${i}/600`, order: 0 }],
+  await Promise.all(
+    users.flatMap((user) =>
+      [0, 1].map((i) =>
+        prisma.post.create({
+          data: {
+            authorId: user.id,
+            caption: `${user.username} post ${i + 1}`,
+            images: {
+              create:
+                i === 0
+                  ? [
+                      { url: `${IMG}/${user.username}-${i}-a/600`, order: 0 },
+                      { url: `${IMG}/${user.username}-${i}-b/600`, order: 1 },
+                    ]
+                  : [{ url: `${IMG}/${user.username}-${i}/600`, order: 0 }],
+            },
           },
-        },
-      });
-    }
-  }
+        })
+      )
+    )
+  );
 
   // likes + comments on bob's posts by alice
   const bobPosts = await prisma.post.findMany({ where: { authorId: bob.id } });
-  for (const p of bobPosts) {
-    await prisma.like.create({ data: { userId: alice.id, postId: p.id } });
-    await prisma.comment.create({
-      data: { postId: p.id, authorId: alice.id, text: 'nice!' },
-    });
-  }
+  await Promise.all(
+    bobPosts.flatMap((p) => [
+      prisma.like.create({ data: { userId: alice.id, postId: p.id } }),
+      prisma.comment.create({
+        data: { postId: p.id, authorId: alice.id, text: 'nice!' },
+      }),
+    ])
+  );
 
   // stories
   await prisma.story.createMany({

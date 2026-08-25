@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
-import { prisma } from '../lib/prisma.js';
+import prisma from '../lib/prisma.js';
 import { signToken } from '../lib/jwt.js';
-import { validateBody } from '../lib/validate.js';
+import validateBody from '../lib/validate.js';
 import { requireAuth, type AuthRequest } from '../middleware/auth.js';
 
-export const authRouter = Router();
+const authRouter = Router();
 
 const publicUser = {
   id: true,
@@ -26,7 +26,9 @@ const registerSchema = z.object({
 });
 
 authRouter.post('/register', validateBody(registerSchema), async (req, res) => {
-  const { email, username, password, name } = req.body as z.infer<typeof registerSchema>;
+  const { email, username, password, name } = req.body as z.infer<
+    typeof registerSchema
+  >;
 
   const exists = await prisma.user.findFirst({
     where: { OR: [{ email }, { username }] },
@@ -42,7 +44,7 @@ authRouter.post('/register', validateBody(registerSchema), async (req, res) => {
   });
 
   const token = signToken({ userId: user.id });
-  res.status(201).json({ token, user });
+  return res.status(201).json({ token, user });
 });
 
 const loginSchema = z.object({
@@ -62,7 +64,7 @@ authRouter.post('/login', validateBody(loginSchema), async (req, res) => {
 
   const token = signToken({ userId: user.id });
   const { passwordHash, ...safe } = user;
-  res.json({ token, user: safe });
+  return res.json({ token, user: safe });
 });
 
 authRouter.get('/me', requireAuth, async (req: AuthRequest, res) => {
@@ -70,6 +72,7 @@ authRouter.get('/me', requireAuth, async (req: AuthRequest, res) => {
     where: { id: req.userId },
     select: publicUser,
   });
-  res.json({ user });
+  return res.json({ user });
 });
 
+export default authRouter;
