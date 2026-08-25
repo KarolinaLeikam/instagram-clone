@@ -17,7 +17,7 @@ export interface PostType {
 }
 
 interface ContextType {
-  allPostsFetch: () => Promise<void>;
+  allPostsFetch: (username?: string) => Promise<void>;
   posts: PostType[];
 }
 
@@ -30,23 +30,31 @@ const PostsContext = createContext<ContextType>(initial);
 export const GetAllPosts = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const [posts, setPosts] = useState<PostType[]>([]);
-  const username = user?.username;
 
-  const allPostsFetch = useCallback(async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        return;
+  const allPostsFetch = useCallback(
+    async (username?: string) => {
+      const usernameToFetch = username || user?.username;
+      if (!usernameToFetch) return;
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          return;
+        }
+        const response = await fetch(
+          `http://localhost:4000/users/${usernameToFetch}/posts`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const data = await response.json();
+        setPosts(data);
+        console.log(data);
+      } catch (error) {
+        console.log(error);
       }
-      const response = await fetch(`http://host:4000/users/${username}/posts`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await response.json();
-      setPosts(data);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [username]);
+    },
+    [user?.username]
+  );
 
   const value = useMemo(
     () => ({

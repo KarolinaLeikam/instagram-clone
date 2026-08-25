@@ -14,6 +14,7 @@ import SearchUsers from '@/pages/SearchUsers/SearchUsers.js';
 import ProtectedRoute from '@/components/common/ProtectedRoute/ProtectedRoute.js';
 import { AuthProvider } from '@/context/AuthContext';
 import { GetAllPosts } from '@/context/GetAllPosts';
+import { GetUserInfoProvider } from '@/context/GetUserInfo.js';
 import './styles/index.js';
 
 const ProtectedLayout = () => (
@@ -39,6 +40,16 @@ const router = createBrowserRouter([
       { path: '/main', element: <Feed /> },
       { path: '/edit', element: <EditProfile /> },
       { path: '/search', element: <SearchUsers /> },
+      {
+        path: '/profile/:username',
+        element: (
+          <GetUserInfoProvider>
+            <GetAllPosts>
+              <Profile />
+            </GetAllPosts>
+          </GetUserInfoProvider>
+        ),
+      },
       {
         path: '/profile',
         element: (

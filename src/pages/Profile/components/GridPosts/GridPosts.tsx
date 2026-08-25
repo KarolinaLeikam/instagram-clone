@@ -1,19 +1,16 @@
 import { useEffect } from 'react';
-
-import { useAuth } from '@/context/AuthContext';
+import { useParams } from 'react-router-dom';
 import { usePosts } from '@/context/GetAllPosts';
 import Picture from './components/Post/Picture';
 import styles from './GridPosts.module.scss';
 
 const GridPosts = () => {
-  const { user } = useAuth();
+  const { username } = useParams();
   const { allPostsFetch, posts } = usePosts();
 
   useEffect(() => {
-    if (!user.username) return;
-
-    allPostsFetch();
-  }, [user.username, allPostsFetch]);
+    allPostsFetch(username);
+  }, [username, allPostsFetch]);
 
   return (
     <div className={styles.grid}>

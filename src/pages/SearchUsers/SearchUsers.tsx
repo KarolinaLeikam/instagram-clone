@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { SearchIcon } from '@/assets/Icons/FooterIcons';
 import { CrossIcon } from '@/assets/Icons/GeneralIcons';
 
 import styles from './SearchUsers.module.scss';
-import { Link } from 'react-router-dom';
 
 interface User {
   id: 'string';
@@ -13,11 +13,14 @@ interface User {
 }
 
 const SearchUsers = () => {
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState<User[]>([]);
   const [searchResult, setSearchResult] = useState('');
+
+  console.log(user);
 
   useEffect(() => {
     if (!searchResult.trim()) {
+      console.log('problem');
       setUser([]);
       return;
     }
@@ -45,7 +48,7 @@ const SearchUsers = () => {
     };
     setTimeout(() => {
       fetchSearch();
-    }, 300);
+    }, 700);
   }, [searchResult]);
 
   return (
@@ -63,7 +66,9 @@ const SearchUsers = () => {
       <Link to="/profile">Return</Link>
       <div>
         {user.map((u) => (
-          <p key={u.id}>{u.name}</p>
+          <Link to={`/profile/${u.username}`}>
+            <p key={u.id}>{u.username}</p>
+          </Link>
         ))}
       </div>
     </div>
