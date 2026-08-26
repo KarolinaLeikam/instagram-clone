@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from 'react';
 import { useParams } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 
 interface ContextUserFriend {
   id: string;
@@ -28,6 +29,7 @@ interface ContextType {
   setUserFriend: Dispatch<SetStateAction<ContextUserFriend | null>>;
   loading: boolean;
   logout: () => void;
+  fetchUserFriend: () => Promise<void>;
 }
 
 const initial: ContextType = {
@@ -35,6 +37,7 @@ const initial: ContextType = {
   setUserFriend: () => {},
   loading: false,
   logout: () => {},
+  fetchUserFriend: () => Promise.resolve(),
 };
 const GetUserInfo = createContext<ContextType>(initial);
 
@@ -42,38 +45,42 @@ export const GetUserInfoProvider = ({ children }: { children: ReactNode }) => {
   const [userFriend, setUserFriend] = useState<ContextUserFriend | null>(null);
   const [loading, setLoading] = useState(true);
   const { username } = useParams();
+  const { user } = useAuth();
+
+  const whatIsUser = username || user?.username;
+  console.log(whatIsUser);
+
+  const fetchUserFriend = async () => {
+    setLoading(true);
+    const token = localStorage.getItem('token');
+    if (!token || !whatIsUser) {
+      setLoading(false);
+      setUserFriend(null);
+      return;
+    }
+    try {
+      const response = await fetch(
+        `http://localhost:4000/users/${whatIsUser}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`Ошибка: ${response.status}`);
+      }
+      const result = await response.json();
+      setUserFriend(result);
+    } catch (err) {
+      console.error(err);
+      localStorage.removeItem('token');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserFriend = async () => {
-      setLoading(true);
-      const token = localStorage.getItem('token');
-      if (!token || !username) {
-        setLoading(false);
-        setUserFriend(null);
-        return;
-      }
-      try {
-        const response = await fetch(
-          `http://localhost:4000/users/${username}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        if (!response.ok) {
-          throw new Error(`Ошибка: ${response.status}`);
-        }
-        const result = await response.json();
-        console.log(result);
-        setUserFriend(result);
-      } catch (err) {
-        console.error(err);
-        localStorage.removeItem('token');
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchUserFriend();
-  }, [username]);
+  }, [whatIsUser]);
 
   const logout = () => {
     localStorage.removeItem('token');
@@ -87,6 +94,7 @@ export const GetUserInfoProvider = ({ children }: { children: ReactNode }) => {
       setUserFriend,
       loading,
       logout,
+      fetchUserFriend,
     }),
     [userFriend, loading]
   );

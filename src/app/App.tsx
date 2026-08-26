@@ -53,9 +53,11 @@ const router = createBrowserRouter([
       {
         path: '/profile',
         element: (
-          <GetAllPosts>
-            <Profile />
-          </GetAllPosts>
+          <GetUserInfoProvider>
+            <GetAllPosts>
+              <Profile />
+            </GetAllPosts>
+          </GetUserInfoProvider>
         ),
       },
       {
