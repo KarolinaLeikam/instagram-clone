@@ -1,23 +1,26 @@
-import Post from './components/Post/Post';
+import { useEffect } from 'react';
+
+import { useAuth } from '@/context/AuthContext';
+import { usePosts } from '@/context/GetAllPosts';
+import Picture from './components/Post/Picture';
 import styles from './GridPosts.module.scss';
 
-const GridPosts = () => (
-  <div className={styles.grid}>
-    <Post />
-    <Post />
-    <Post />
-    <Post />
-    <Post />
-    <Post />
-    <Post />
-    <Post />
-    <Post />
-    <Post />
-    <Post />
-    <Post />
-    <Post />
-    <Post />
-    <Post />
-  </div>
-);
+const GridPosts = () => {
+  const { user } = useAuth();
+  const { allPostsFetch, posts } = usePosts();
+
+  useEffect(() => {
+    if (!user.username) return;
+
+    allPostsFetch();
+  }, [user.username, allPostsFetch]);
+
+  return (
+    <div className={styles.grid}>
+      {posts.map((post) => (
+        <Picture post={post} key={post.id} />
+      ))}
+    </div>
+  );
+};
 export default GridPosts;

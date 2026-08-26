@@ -75,6 +75,7 @@ export default [
         { ts: 'never', tsx: 'never' },
       ],
       'import-x/no-unresolved': ['error', { ignore: ['\\?react$'] }],
+      '@typescript-eslint/no-explicit-any': 'error',
     },
   },
 

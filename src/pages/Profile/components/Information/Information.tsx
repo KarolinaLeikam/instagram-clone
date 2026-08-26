@@ -1,5 +1,7 @@
 import { Avatar, Button } from '@/components/ui';
 import { UserAddIcon } from '@/assets/Icons/GeneralIcons';
+
+import { Link } from 'react-router-dom';
 import {
   AllFollowers,
   NameProfile,
@@ -8,7 +10,7 @@ import {
 } from './components';
 import styles from './Information.module.scss';
 
-const Information: React.FC = () => (
+const Information = () => (
   <div className={styles.container}>
     <div className={styles.containerAvatar}>
       <Avatar />
@@ -16,7 +18,10 @@ const Information: React.FC = () => (
     </div>
     <NameProfile />
     <div className={styles.buttons}>
-      <Button className={styles.buttonRedactor}>Modifier le profil</Button>
+      <Link to="/edit" className={styles.buttonRedactor}>
+        Edit profile
+      </Link>
+
       <Button className={styles.buttonSubcribe}>
         <UserAddIcon />
       </Button>

@@ -11,7 +11,7 @@ import styles from './Footer.module.scss';
 const Footer = () => (
   <div className={styles.container}>
     <div className={styles.contentImg}>
-      <Link to="/">
+      <Link to="/main">
         <HomeIcon />
       </Link>
       <PlayAltIcon />

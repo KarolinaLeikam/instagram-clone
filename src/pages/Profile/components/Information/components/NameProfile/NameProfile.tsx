@@ -1,7 +1,13 @@
-const NameProfile = () => (
-  <div>
-    <h3>MonNom</h3>
-    <p>La description de mon profil</p>
-  </div>
-);
+import { useAuth } from '@/context/AuthContext';
+
+const NameProfile = () => {
+  const { user } = useAuth();
+  return (
+    <div>
+      <h3>{user.name}</h3>
+      <p>{user.bio}</p>
+    </div>
+  );
+};
+
 export default NameProfile;
