@@ -2,9 +2,9 @@ import HeaderFeed from '@/pages/Feed/components/HeaderFeed/HeaderFeed';
 import Footer from '@/components/common/Footer/Footer';
 import StatusBar from '@/components/common/StatusBar/StatusBar';
 import StoriesHeader from '@/pages/Feed/components/StoriesHeader/StoriesHeader';
-import PostFriend from '@/components/common/PostFriend/PostFriend';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import routes from '@/utils/router';
 import styles from './Feed.module.scss';
 
 const Feed = () => {
@@ -13,8 +13,9 @@ const Feed = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate(routes.login);
   };
+
   return (
     <div className={styles.page}>
       <StatusBar />

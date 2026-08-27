@@ -3,13 +3,15 @@ import { useState } from 'react';
 import { Button } from '@/components/ui';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import AuthInput from '@/components/common/AuthInput/AuthInput';
-import { userRegex, passwordRegex } from '@/utils/validation';
+import { userRegex, validationRules } from '@/utils/validation';
 import {
   EyeClosedIcon,
   EyeIcon,
   InstagramIcon,
 } from '@/assets/Icons/GeneralIcons';
 
+import API from '@/utils/api';
+import { ApiError } from '@/utils/classError';
 import styles from './Login.module.scss';
 
 interface LoginForm {
@@ -17,17 +19,34 @@ interface LoginForm {
   password: string;
 }
 
+// delete
 interface LoginForm {
   userName: string;
   password: string;
   age: string;
 }
 
+// routes to variables
+
+type FormField = 'userName' | 'password' | 'root';
+
+const LOGIN_ERRORS: Record<string, { field: FormField; message: string }> = {
+  USER_NOT_FOUND: { field: 'userName', message: 'Пользователь не найден' },
+  WRONG_PASSWORD: { field: 'password', message: 'Неверный пароль' },
+  NETWORK: { field: 'root', message: 'Нет соединения с сервером' },
+};
+
+const FALLBACK: { field: FormField; message: string } = {
+  field: 'root',
+  message: 'Что-то пошло не так, попробуйте снова',
+};
+
 const Login = () => {
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<LoginForm>({
     mode: 'onChange',
@@ -41,27 +60,15 @@ const Login = () => {
     data: LoginForm
   ): Promise<void> => {
     try {
-      const path = 'http://localhost:4000';
-      const body = JSON.stringify({
-        login: data.userName,
-        password: data.password,
-      });
+      const response = await API.login(data.userName, data.password);
 
-      const response = await fetch(`${path}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body,
-      });
-      if (!response.ok) {
-        throw new Error('Ошибка входа');
-      }
-      const result = await response.json();
-
-      localStorage.setItem('token', result.token);
+      localStorage.setItem('token', response.token);
       navigate('/main');
     } catch (err) {
-      console.error('Ошибка входа:', err);
-      alert('Что-то пошло не так, попробуйте снова');
+      const { field, message } =
+        (err instanceof ApiError && LOGIN_ERRORS[err.code]) || FALLBACK;
+
+      setError(field, { message });
     }
   };
 
@@ -93,10 +100,7 @@ const Login = () => {
             register={register}
             name="password"
             rules={{
-              pattern: {
-                value: passwordRegex,
-                message: 'Пароль слишком простой!',
-              },
+              pattern: validationRules.passwordInput,
             }}
             placeholder="Password"
             type={showPassword ? 'text' : 'password'}
@@ -108,12 +112,16 @@ const Login = () => {
             <EyeIcon className={styles.icons} onClick={togglePassword} />
           )}
         </div>
+        {errors.root && (
+          <p className={styles.formError}>{errors.root.message}</p>
+        )}
         <Button type="submit" className={styles.button}>
           Log in
         </Button>
       </form>
       <div className={styles.layoutText}>
         <p>Dont have an account?</p>
+
         <Link to="/signup" className={styles.link}>
           Sign Up.
         </Link>

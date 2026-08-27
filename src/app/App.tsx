@@ -42,13 +42,7 @@ const router = createBrowserRouter([
       { path: '/search', element: <SearchUsers /> },
       {
         path: '/profile/:username',
-        element: (
-          <GetUserInfoProvider>
-            <GetAllPosts>
-              <Profile />
-            </GetAllPosts>
-          </GetUserInfoProvider>
-        ),
+        element: <Profile />,
       },
       {
         path: '/profile',
