@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom';
+import routes from '@/utils/router';
 import { Footer, StatusBar } from '@/components/common';
 import { Header, Information, GridPosts } from './components';
 
@@ -6,7 +7,7 @@ import styles from './Profile.module.scss';
 
 const Profile = () => {
   const location = useLocation();
-  const pathYourProfile = location.pathname === '/profile';
+  const pathYourProfile = location.pathname === routes.profileOwn;
 
   return (
     <div className={styles.page}>

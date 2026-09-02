@@ -2,6 +2,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useState } from 'react';
 import { Button } from '@/components/ui';
 import { useForm, type SubmitHandler } from 'react-hook-form';
+import routes from '@/utils/router';
 import AuthInput from '@/components/common/AuthInput/AuthInput';
 import { userRegex, validationRules } from '@/utils/validation';
 import {
@@ -19,27 +20,20 @@ interface LoginForm {
   password: string;
 }
 
-// delete
-interface LoginForm {
-  userName: string;
-  password: string;
-  age: string;
-}
-
 // routes to variables
 
-type FormField = 'userName' | 'password' | 'root';
+// type FormField = 'userName' | 'password' | 'root';
 
-const LOGIN_ERRORS: Record<string, { field: FormField; message: string }> = {
-  USER_NOT_FOUND: { field: 'userName', message: 'Пользователь не найден' },
-  WRONG_PASSWORD: { field: 'password', message: 'Неверный пароль' },
-  NETWORK: { field: 'root', message: 'Нет соединения с сервером' },
-};
+// const LOGIN_ERRORS: Record<string, { field: FormField; message: string }> = {
+//   USER_NOT_FOUND: { field: 'userName', message: 'Пользователь не найден' },
+//   WRONG_PASSWORD: { field: 'password', message: 'Неверный пароль' },
+//   NETWORK: { field: 'root', message: 'Нет соединения с сервером' },
+// };
 
-const FALLBACK: { field: FormField; message: string } = {
-  field: 'root',
-  message: 'Что-то пошло не так, попробуйте снова',
-};
+// const FALLBACK: { field: FormField; message: string } = {
+//   field: 'root',
+//   message: 'Что-то пошло не так, попробуйте снова',
+// };
 
 const Login = () => {
   const navigate = useNavigate();
@@ -59,16 +53,17 @@ const Login = () => {
   const onSubmit: SubmitHandler<LoginForm> = async (
     data: LoginForm
   ): Promise<void> => {
+    console.log('1. Функция onSubmit запустилась с данными:', data);
     try {
+      console.log('2. Отправляем запрос на сервер...');
       const response = await API.login(data.userName, data.password);
-
+      console.log('3. Успешный ответ:', response);
       localStorage.setItem('token', response.token);
-      navigate('/main');
+      navigate(routes.feed);
     } catch (err) {
-      const { field, message } =
-        (err instanceof ApiError && LOGIN_ERRORS[err.code]) || FALLBACK;
-
-      setError(field, { message });
+      if (err instanceof ApiError) {
+        console.log('4. Поймали ошибку в catch:', err);
+      }
     }
   };
 
@@ -86,10 +81,7 @@ const Login = () => {
           register={register}
           name="userName"
           rules={{
-            pattern: {
-              value: userRegex,
-              message: 'От 3 до 20 символов, латиница и цифры',
-            },
+            pattern: validationRules.usernameInput,
           }}
           placeholder="User Name"
           error={errors.userName}
@@ -122,7 +114,7 @@ const Login = () => {
       <div className={styles.layoutText}>
         <p>Dont have an account?</p>
 
-        <Link to="/signup" className={styles.link}>
+        <Link to={routes.signup} className={styles.link}>
           Sign Up.
         </Link>
       </div>

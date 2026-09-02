@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import routes from '@/utils/router';
 import { AngleLeftIcon } from '@/assets/Icons/GeneralIcons';
 import AvatarImg from '@/assets/Images/Avatar.jpg';
 import { StatusBar } from '@/components/common';
@@ -55,7 +56,7 @@ const EditProfile = () => {
 
       const result = await response.json();
       setUser(result.user ?? result);
-      navigate('/profile');
+      navigate(routes.profileOwn);
     } catch (err) {
       console.log(err);
     }
@@ -64,7 +65,7 @@ const EditProfile = () => {
     <div>
       <StatusBar />
       <div className={styles.layoutHeader}>
-        <Link to="/profile">
+        <Link to={routes.profileOwn}>
           <AngleLeftIcon />
         </Link>
         <p className={styles.text}>Edit profile</p>

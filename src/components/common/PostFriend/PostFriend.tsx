@@ -9,7 +9,9 @@ import { useLocation } from 'react-router-dom';
 import { MenuDotsIcon } from '@/assets/Icons/GeneralIcons';
 import { useState } from 'react';
 import type { PostType } from '@/context/GetAllPosts';
+import routes from '@/utils/router';
 import MenuPhoto from '../../modal/MenuPhoto/MenuPhoto';
+
 import styles from './PostFriend.module.scss';
 
 const PostFriend = ({ post }: { post: PostType }) => {
@@ -17,7 +19,7 @@ const PostFriend = ({ post }: { post: PostType }) => {
   const { user } = useAuth();
 
   const location = useLocation();
-  const isHideImage = location.pathname === '/main';
+  const isHideImage = location.pathname === routes.feed;
   return (
     <div className={styles.container}>
       <div className={styles.containerHeader}>

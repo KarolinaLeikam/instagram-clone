@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm, type SubmitHandler } from 'react-hook-form';
+import routes from '@/utils/router';
 import {
   EyeIcon,
   EyeClosedIcon,
@@ -8,7 +9,7 @@ import {
 import AuthInput from '@/components/common/AuthInput/AuthInput';
 
 import { useState } from 'react';
-import { emailRegex, passwordRegex, userRegex } from '@/utils/validation';
+import { validationRules } from '@/utils/validation';
 import styles from './SignUp.module.scss';
 
 export interface FormInput {
@@ -78,10 +79,7 @@ const SignUp = () => {
           name="mail"
           rules={{
             required: 'Email обязателен для заполнения',
-            pattern: {
-              value: emailRegex,
-              message: 'Введите корректный адрес (например, user@mail.com)',
-            },
+            pattern: validationRules.mailInput,
           }}
           placeholder="Email"
           error={errors.mail}
@@ -100,10 +98,7 @@ const SignUp = () => {
           register={register}
           name="userName"
           rules={{
-            pattern: {
-              value: userRegex,
-              message: 'От 3 до 20 символов, латиница и цифры',
-            },
+            pattern: validationRules.usernameInput,
           }}
           placeholder="User Name"
           error={errors.userName}
@@ -113,10 +108,7 @@ const SignUp = () => {
             register={register}
             name="password"
             rules={{
-              pattern: {
-                value: passwordRegex,
-                message: 'Пароль слишком простой!',
-              },
+              pattern: validationRules.passwordInput,
             }}
             placeholder="Password"
             type={showPassword ? 'text' : 'password'}
@@ -137,7 +129,7 @@ const SignUp = () => {
       </form>
       <div className={styles.layoutText}>
         <p>Have an account?</p>
-        <Link className={styles.link} to="/login">
+        <Link className={styles.link} to={routes.login}>
           Log in.
         </Link>
       </div>

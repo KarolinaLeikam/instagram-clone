@@ -6,6 +6,7 @@ import {
   AngleLeftIcon,
   MenuDotsIcon,
 } from '@/assets/Icons/GeneralIcons';
+import routes from '@/utils/router';
 import { useState } from 'react';
 import AddPhoto from '@/components/modal/AddPhoto/AddPhoto';
 import styles from './Header.module.scss';
@@ -17,7 +18,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
-  const pathYourProfile = location.pathname === '/profile';
+  const pathYourProfile = location.pathname === routes.profileOwn;
 
   return (
     <div className={styles.header}>
@@ -26,7 +27,7 @@ const Header = () => {
           {pathYourProfile ? (
             <LockIcon />
           ) : (
-            <AngleLeftIcon onClick={() => navigate('/main')} />
+            <AngleLeftIcon onClick={() => navigate(routes.feed)} />
           )}
           <h1>{!pathYourProfile ? username : user?.username}</h1>
           {pathYourProfile && <span className={styles.buttonNumber}>9+</span>}

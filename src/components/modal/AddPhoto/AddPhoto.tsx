@@ -3,8 +3,8 @@ import { useLocation } from 'react-router-dom';
 import { CrossIcon } from '@/assets/Icons/GeneralIcons';
 import { Button } from '@/components/ui';
 import { usePosts } from '@/context/GetAllPosts';
+import routes from '@/utils/router';
 import { type StoriesModalProps } from '../Stories/StoriesModal';
-
 import styles from './AddPhoto.module.scss';
 
 interface AllModalProps extends StoriesModalProps {
@@ -64,8 +64,8 @@ const AddPhoto = ({
     onMyClose();
   }, [previewUrl, onMyClose]);
 
-  const isProfilePage = location.pathname.includes('/profile');
-  const isEditPage = location.pathname.includes('/edit');
+  const isProfilePage = location.pathname.includes(routes.profileOwn);
+  const isEditPage = location.pathname.includes(routes.edit);
 
   const fetchPost = useCallback(async () => {
     if (!selectedFile) {

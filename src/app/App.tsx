@@ -1,61 +1,46 @@
 import {
   createBrowserRouter,
   Navigate,
-  Outlet,
   RouterProvider,
 } from 'react-router-dom';
 import Feed from '@/pages/Feed/Feed';
-import Profile from '@/pages/Profile/Profile';
+import ProfileProvider from '@/app/componentsProvider/ProfileProvider.js';
 import Post from '@/pages/Post/Post';
 import Login from '@/pages/Login/Login.js';
 import SignUp from '@/pages/SignUp/SignUp';
 import EditProfile from '@/pages/EditProfile/EditProfile';
 import SearchUsers from '@/pages/SearchUsers/SearchUsers.js';
-import ProtectedRoute from '@/components/common/ProtectedRoute/ProtectedRoute.js';
-import { AuthProvider } from '@/context/AuthContext';
 import { GetAllPosts } from '@/context/GetAllPosts';
-import { GetUserInfoProvider } from '@/context/GetUserInfo.js';
-import './styles/index.js';
+import routes from '@/utils/router.js';
+import ProtectedLayout from './componentsProvider/ProtectedLayout.js';
 
-const ProtectedLayout = () => (
-  <AuthProvider>
-    <ProtectedRoute>
-      <Outlet />
-    </ProtectedRoute>
-  </AuthProvider>
-);
+import './styles/index.js';
 
 const router = createBrowserRouter([
   {
-    path: '/login',
+    path: routes.login,
     element: <Login />,
   },
   {
-    path: '/signup',
+    path: routes.signup,
     element: <SignUp />,
   },
   {
     element: <ProtectedLayout />,
     children: [
-      { path: '/main', element: <Feed /> },
-      { path: '/edit', element: <EditProfile /> },
-      { path: '/search', element: <SearchUsers /> },
+      { path: routes.signup, element: <Feed /> },
+      { path: routes.edit, element: <EditProfile /> },
+      { path: routes.search, element: <SearchUsers /> },
       {
-        path: '/profile/:username',
-        element: <Profile />,
+        path: routes.profileUser,
+        element: <ProfileProvider />,
       },
       {
-        path: '/profile',
-        element: (
-          <GetUserInfoProvider>
-            <GetAllPosts>
-              <Profile />
-            </GetAllPosts>
-          </GetUserInfoProvider>
-        ),
+        path: routes.profileOwn,
+        element: <ProfileProvider />,
       },
       {
-        path: '/post',
+        path: routes.post,
         element: (
           <GetAllPosts>
             <Post />
@@ -66,7 +51,7 @@ const router = createBrowserRouter([
   },
   {
     path: '*',
-    element: <Navigate to="/login" replace />,
+    element: <Navigate to={routes.login} replace />,
   },
 ]);
 

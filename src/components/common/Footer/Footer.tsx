@@ -6,6 +6,7 @@ import {
   SearchIcon,
   ShopBagIcon,
 } from '@/assets/Icons/FooterIcons';
+import routes from '@/utils/router';
 
 import styles from './Footer.module.scss';
 
@@ -14,15 +15,15 @@ const Footer = () => {
   return (
     <div className={styles.container}>
       <div className={styles.contentImg}>
-        <Link to="/main">
+        <Link to={routes.feed}>
           <HomeIcon />
         </Link>
         <PlayAltIcon />
-        <Link to="/search">
+        <Link to={routes.search}>
           <SearchIcon />
         </Link>
         <ShopBagIcon />
-        <Link to="/profile">
+        <Link to={routes.profileOwn}>
           <div className={styles.circle}>
             <img
               className={styles.AvatarImg}

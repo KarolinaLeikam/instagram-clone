@@ -8,16 +8,28 @@ class API {
   static async fetchApi(
     method: string,
     url: string,
-    body: Record<string, unknown>
+    body?: Record<string, unknown>,
+    token?: string
   ) {
     let response: Response;
 
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    const options: RequestInit = {
+      method,
+      headers,
+    };
+
+    if (body) {
+      options.body = JSON.stringify(body);
+    }
+
     try {
-      response = await fetch(`${this.path}/${url}`, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
+      response = await fetch(`${this.path}/${url}`, options);
     } catch {
       throw new ApiError(0, 'NETWORK');
     }
@@ -25,7 +37,8 @@ class API {
     const result = await response.json().catch(() => null);
 
     if (!response.ok) {
-      throw new ApiError(response.status, result?.code, result);
+      console.log(response);
+      throw new Error('error new');
     }
 
     return result;
@@ -37,7 +50,7 @@ class API {
   ): Promise<{
     token: string;
   }> {
-    const response = await this.fetchApi('POST', 'auth/api', {
+    const response = await this.fetchApi('POST', 'auth/login', {
       login: username,
       password,
     });

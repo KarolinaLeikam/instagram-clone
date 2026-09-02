@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import routes from '@/utils/router';
 import { SearchIcon } from '@/assets/Icons/FooterIcons';
 import { CrossIcon } from '@/assets/Icons/GeneralIcons';
 
 import styles from './SearchUsers.module.scss';
+
 
 interface User {
   id: 'string';
@@ -63,10 +65,10 @@ const SearchUsers = () => {
           setSearchResult(e.target.value);
         }}
       />
-      <Link to="/profile">Return</Link>
+      <Link to={routes.profileOwn}>Return</Link>
       <div>
         {user.map((u) => (
-          <Link to={`/profile/${u.username}`}>
+          <Link to={`${routes.profileOwn}${u.username}`}>
             <p key={u.id}>{u.username}</p>
           </Link>
         ))}

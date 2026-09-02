@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useGetFriend } from '@/context/GetUserInfo';
 import { useAuth } from '@/context/AuthContext';
+import routes from '@/utils/router';
 import { Avatar, Button } from '@/components/ui';
 import { UserAddIcon } from '@/assets/Icons/GeneralIcons';
 
@@ -17,7 +18,7 @@ import styles from './Information.module.scss';
 const Information = () => {
   const { username } = useParams();
   const location = useLocation();
-  const pathYourProfile = location.pathname === '/profile';
+  const pathYourProfile = location.pathname === routes.profileOwn;
   const { userFriend, fetchUserFriend } = useGetFriend();
   const { user } = useAuth();
   const [follow, setFollow] = useState<boolean>(
@@ -68,7 +69,7 @@ const Information = () => {
       <div className={styles.buttons}>
         {pathYourProfile && (
           <div>
-            <Link to="/edit" className={styles.buttonRedactor}>
+            <Link to={routes.edit} className={styles.buttonRedactor}>
               Edit profile
             </Link>
             <Button className={styles.buttonSubcribe}>
