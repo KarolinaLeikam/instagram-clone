@@ -20,6 +20,14 @@ interface LoginForm {
   password: string;
 }
 
+const LOGIN_ERRORS: Record<string, string> = {
+  'Invalid credentials': 'Неверный логин или пароль',
+  'Validation failed': 'Проверьте правильность заполнения полей',
+  NETWORK: 'Нет соединения с сервером',
+};
+
+const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
+
 // routes to variables
 
 // type FormField = 'userName' | 'password' | 'root';
@@ -61,9 +69,11 @@ const Login = () => {
       localStorage.setItem('token', response.token);
       navigate(routes.feed);
     } catch (err) {
-      if (err instanceof ApiError) {
-        console.log('4. Поймали ошибку в catch:', err);
-      }
+      const message =
+        err instanceof ApiError
+          ? LOGIN_ERRORS[err.code] ?? err.code
+          : FALLBACK_ERROR;
+      setError('root', { message });
     }
   };
 

@@ -37,8 +37,9 @@ class API {
     const result = await response.json().catch(() => null);
 
     if (!response.ok) {
-      console.log(response);
-      throw new Error('error new');
+      const code =
+        (result as { error?: string } | null)?.error ?? response.statusText;
+      throw new ApiError(response.status, code, result);
     }
 
     return result;
