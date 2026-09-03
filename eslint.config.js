@@ -65,16 +65,16 @@ export default [
       // TS handles these — airbnb defaults redundant here
       'react/prop-types': 'off',
       // React 19 dropped defaultProps for fn components — use default args
-      'react/require-default-props': [
-        'error',
-        { functions: 'defaultArguments' },
-      ],
+      'react/require-default-props': 'off',
       'import-x/extensions': [
         'error',
         'ignorePackages',
         { ts: 'never', tsx: 'never' },
       ],
       'import-x/no-unresolved': ['error', { ignore: ['\\?react$'] }],
+      '@typescript-eslint/no-explicit-any': 'error',
+      // Prisma's `_count` relation aggregate — not renameable
+      'no-underscore-dangle': ['error', { allow: ['_count'] }],
     },
   },
 
