@@ -20,6 +20,19 @@ interface LoginForm {
   password: string;
 }
 
+<<<<<<< HEAD
+=======
+const LOGIN_ERRORS: Record<string, string> = {
+  'Invalid credentials': 'Неверный логин или пароль',
+  'Validation failed': 'Проверьте правильность заполнения полей',
+  NETWORK: 'Нет соединения с сервером',
+};
+
+const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
+
+// routes to variables
+
+>>>>>>> 2e178c5ddeef6dc739be4ec88abbec0a8f9e71e8
 // type FormField = 'userName' | 'password' | 'root';
 
 // const LOGIN_ERRORS: Record<string, { field: FormField; message: string }> = {

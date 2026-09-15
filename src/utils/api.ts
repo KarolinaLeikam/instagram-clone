@@ -54,8 +54,6 @@ class API {
     console.log(result);
 
     if (!response.ok) {
-      console.log(response);
-
       const code = result?.error ?? response.statusText;
       throw new ApiError(response.status, code, result);
     }
