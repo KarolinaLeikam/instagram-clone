@@ -22,12 +22,12 @@ const DeleteModal = ({ isOpen, onCancel, post }: Props) => {
   const handleDeletePost = async () => {
     if (!user?.username) return;
     try {
-      const response = await API.deletePost(post.id);
+      await API.deletePost(post.id);
       allPostsFetch();
       onCancel();
     } catch (err) {
       const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
-      console.log(message);
+      console.error(message);
     }
   };
 

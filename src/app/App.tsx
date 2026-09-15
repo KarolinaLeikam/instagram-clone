@@ -4,16 +4,15 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import Feed from '@/pages/Feed/Feed';
-import ProfileProvider from '@/app/componentsProvider/ProfileProvider.js';
+import ProfileProvider from '@/app/componentsProvider/ProfileProvider';
 import Post from '@/pages/Post/Post';
-import Login from '@/pages/Login/Login.js';
+import Login from '@/pages/Login/Login';
 import SignUp from '@/pages/SignUp/SignUp';
 import EditProfile from '@/pages/EditProfile/EditProfile';
-import SearchUsers from '@/pages/SearchUsers/SearchUsers.js';
+import SearchUsers from '@/pages/SearchUsers/SearchUsers';
 import { GetAllPosts } from '@/context/GetAllPosts';
-import routes from '@/utils/router.js';
-import ProtectedLayout from './componentsProvider/ProtectedLayout.js';
-
+import routes from '@/utils/router';
+import ProtectedLayout from './componentsProvider/ProtectedLayout';
 import './styles/index.js';
 
 const router = createBrowserRouter([

@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import ProtectedRoute from '@/components/common/ProtectedRoute/ProtectedRoute.js';
+import ProtectedRoute from '@/components/common/ProtectedRoute/ProtectedRoute';
 import { AuthProvider } from '@/context/AuthContext';
 
 const ProtectedLayout = () => (

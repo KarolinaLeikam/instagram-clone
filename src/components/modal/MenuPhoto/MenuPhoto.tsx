@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui';
 import { CrossIcon } from '@/assets/Icons/GeneralIcons';
 import { useEffect, useRef, useState } from 'react';
-import type { PostType } from '@/context/GetAllPosts';
+import { type PostType } from '@/types';
 import DeleteModal from '../DeleteModal/DeleteModal';
 
 import styles from './MenuPhoto.module.scss';

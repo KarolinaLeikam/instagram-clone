@@ -37,7 +37,7 @@ export const GetAllPosts = ({ children }: { children: ReactNode }) => {
         setPosts(response);
       } catch (err) {
         const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
-        console.log(message);
+        console.error(message);
       }
     },
     [user]

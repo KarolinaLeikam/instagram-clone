@@ -20,32 +20,6 @@ interface LoginForm {
   password: string;
 }
 
-<<<<<<< HEAD
-=======
-const LOGIN_ERRORS: Record<string, string> = {
-  'Invalid credentials': 'Неверный логин или пароль',
-  'Validation failed': 'Проверьте правильность заполнения полей',
-  NETWORK: 'Нет соединения с сервером',
-};
-
-const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
-
-// routes to variables
-
->>>>>>> 2e178c5ddeef6dc739be4ec88abbec0a8f9e71e8
-// type FormField = 'userName' | 'password' | 'root';
-
-// const LOGIN_ERRORS: Record<string, { field: FormField; message: string }> = {
-//   USER_NOT_FOUND: { field: 'userName', message: 'Пользователь не найден' },
-//   WRONG_PASSWORD: { field: 'password', message: 'Неверный пароль' },
-//   NETWORK: { field: 'root', message: 'Нет соединения с сервером' },
-// };
-
-// const FALLBACK: { field: FormField; message: string } = {
-//   field: 'root',
-//   message: 'Что-то пошло не так, попробуйте снова',
-// };
-
 const LOGIN_ERRORS: Record<string, string> = {
   'Invalid credentials': 'Неверный логин или пароль',
   'Validation failed': 'Проверьте правильность заполнения полей',
@@ -72,11 +46,8 @@ const Login = () => {
   const onSubmit: SubmitHandler<LoginForm> = async (
     data: LoginForm
   ): Promise<void> => {
-    console.log('1. Функция onSubmit запустилась с данными:', data);
     try {
-      console.log('2. Отправляем запрос на сервер...');
       const response = await API.login(data.userName, data.password);
-      console.log('3. Успешный ответ:', response);
       localStorage.setItem('token', response.token);
       navigate(routes.feed);
     } catch (err) {

@@ -7,14 +7,10 @@ const NameProfile = () => {
   const { userFriend, loading } = useGetFriend();
   const { username } = useParams();
 
-  console.log(user);
-  console.log(userFriend);
-
-  console.log(username);
   if (loading) {
     return <div>Загрузка профиля...</div>;
   }
-  console.log(loading);
+
   const currentProfile = username ? userFriend : user;
 
   return (

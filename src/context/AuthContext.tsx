@@ -8,18 +8,10 @@ import {
   type SetStateAction,
   type ReactNode,
 } from 'react';
+import { type UserType } from '@/types';
 import { ApiError } from '@/utils/classError';
 import API from '@/utils/api';
 
-interface UserType {
-  id: string;
-  email: string;
-  username: string;
-  name: string;
-  bio: string;
-  avatarUrl: string;
-  createdAt: string;
-}
 interface ContextType {
   user: UserType | null;
   setUser: Dispatch<SetStateAction<UserType | null>>;
@@ -49,8 +41,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(response.user);
       } catch (err) {
         const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
-        console.log(message);
-        localStorage.removeItem('token');
+        console.error(message);
       } finally {
         setLoading(false);
       }
@@ -61,7 +52,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
-    console.log('logout1');
   };
 
   const value = useMemo(

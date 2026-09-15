@@ -19,7 +19,7 @@ const Avatar = ({ className = '', size = 80 }: AvatarProps) => {
     width: `${size}px`,
     height: `${size}px`,
   };
-  console.log(user?.avatarUrl);
+
   return (
     <div className={`${styles.container} ${className}`} style={containerStyle}>
       <img

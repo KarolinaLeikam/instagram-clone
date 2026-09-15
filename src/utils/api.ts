@@ -7,10 +7,14 @@ import {
 } from '@/types';
 import { ApiError } from './classError';
 
-class API {
-  private static readonly path = 'http://localhost:4000';
+class ApiClient {
+  private readonly baseURL: string;
 
-  static async fetchApi(
+  constructor(baseURL: string) {
+    this.baseURL = baseURL;
+  }
+
+  async fetchApi(
     method: string,
     url: string,
     body?: Record<string, unknown> | FormData,
@@ -43,7 +47,7 @@ class API {
     }
 
     try {
-      response = await fetch(`${this.path}/${url}`, options);
+      response = await fetch(`${this.baseURL}/${url}`, options);
     } catch {
       throw new ApiError(0, 'NETWORK');
     }
@@ -51,17 +55,19 @@ class API {
     const result = (await response.json().catch(() => null)) as {
       error?: string;
     } | null;
-    console.log(result);
 
     if (!response.ok) {
       const code = result?.error ?? response.statusText;
+      if (response.status === 401) {
+        localStorage.removeItem('token');
+      }
       throw new ApiError(response.status, code, result);
     }
 
     return result;
   }
 
-  static async login(
+  async login(
     username: string,
     password: string
   ): Promise<{
@@ -75,7 +81,7 @@ class API {
     return response as { token: string };
   }
 
-  static async signUp(userData: {
+  async signUp(userData: {
     email: string;
     username: string;
     name: string;
@@ -88,19 +94,19 @@ class API {
     return response as { token: string };
   }
 
-  static async authMe(): Promise<{ user: UserType }> {
+  async authMe(): Promise<{ user: UserType }> {
     const response = await this.fetchApi('GET', 'auth/me', undefined, true);
 
     return response as { user: UserType };
   }
 
-  static async createPost(formData: FormData): Promise<PostType> {
+  async createPost(formData: FormData): Promise<PostType> {
     const response = await this.fetchApi('POST', 'posts', formData, true);
 
     return response as PostType;
   }
 
-  static async getGridPosts(username?: string): Promise<PostType[]> {
+  async getGridPosts(username?: string): Promise<PostType[]> {
     const response = await this.fetchApi(
       'GET',
       `users/${username}/posts`,
@@ -111,16 +117,11 @@ class API {
     return response as PostType[];
   }
 
-  static async deletePost(id: string): Promise<void> {
-    const response = await this.fetchApi(
-      'DELETE',
-      `posts/${id}`,
-      undefined,
-      true
-    );
+  async deletePost(id: string): Promise<void> {
+    await this.fetchApi('DELETE', `posts/${id}`, undefined, true);
   }
 
-  static async getUsernameInfo(username?: string): Promise<ContextUserFriend> {
+  async getUsernameInfo(username?: string): Promise<ContextUserFriend> {
     const response = await this.fetchApi(
       'GET',
       `users/${username}`,
@@ -131,16 +132,13 @@ class API {
     return response as ContextUserFriend;
   }
 
-  static async editInfo(formData: FormData): Promise<{ user: UserType }> {
+  async editInfo(formData: FormData): Promise<{ user: UserType }> {
     const response = await this.fetchApi('PATCH', `users/me`, formData, true);
 
     return response as { user: UserType };
   }
 
-  static async followUser(
-    method: string,
-    username?: string
-  ): Promise<FollowResponse> {
+  async followUser(method: string, username?: string): Promise<FollowResponse> {
     const response = await this.fetchApi(
       method,
       `users/${username}/follow`,
@@ -151,7 +149,7 @@ class API {
     return response as FollowResponse;
   }
 
-  static async searchUser(searchResult: string): Promise<UserSearch[]> {
+  async searchUser(searchResult: string): Promise<UserSearch[]> {
     const response = await this.fetchApi(
       'GET',
       `users/search?q=${encodeURIComponent(searchResult)}`,
@@ -162,5 +160,7 @@ class API {
     return response as UserSearch[];
   }
 }
+
+const API = new ApiClient(import.meta.env.VITE_API_URL);
 
 export default API;

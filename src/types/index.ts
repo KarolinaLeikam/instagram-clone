@@ -51,8 +51,8 @@ export interface FollowResponse {
   isFollowing: boolean;
 }
 export interface UserSearch {
-  id: 'string';
-  username: 'string';
-  name: 'string';
-  avatarUrl: 'string';
+  id: string;
+  username: string;
+  name: string;
+  avatarUrl: string;
 }

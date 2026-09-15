@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import routes from '@/utils/router';
-import type { PostType } from '@/context/GetAllPosts';
+import type { PostType } from '@/types';
 import styles from './Picture.module.scss';
 
 const Picture = ({ post }: { post: PostType }) => (
@@ -11,7 +11,7 @@ const Picture = ({ post }: { post: PostType }) => (
   >
     <img
       className={styles.img}
-      src={`http://localhost:4000${post.cover}`}
+      src={`http://localhost:4000${post.images[0]?.url}`}
       alt=""
     />
   </Link>

@@ -47,7 +47,7 @@ const Information = () => {
       fetchUserFriend();
     } catch (err) {
       const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
-      console.log(message);
+      console.error(message);
     }
   };
 

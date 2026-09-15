@@ -50,7 +50,6 @@ const SignUp = () => {
       };
       const response = await API.signUp(body);
       localStorage.setItem('token', response.token);
-      console.log('process');
       navigate(routes.feed);
     } catch (err) {
       const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;

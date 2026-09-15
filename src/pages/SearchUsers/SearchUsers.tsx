@@ -27,7 +27,7 @@ const SearchUsers = () => {
           setUser(response);
         } catch (err) {
           const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
-          console.log(message);
+          console.error(message);
         }
       };
       fetchSearch();
@@ -50,8 +50,8 @@ const SearchUsers = () => {
       <Link to={routes.profileOwn}>Return</Link>
       <div>
         {user.map((u) => (
-          <Link to={`${routes.profileOwn}${u.username}`}>
-            <p key={u.id}>{u.username}</p>
+          <Link to={`${routes.profileOwn}${u.username}`} key={u.id}>
+            <p>{u.username}</p>
           </Link>
         ))}
       </div>

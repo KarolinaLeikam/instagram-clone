@@ -84,8 +84,8 @@ const AddPhoto = ({
         if (caption) {
           formData.append('caption', caption);
         }
-        const response = await API.createPost(formData);
-        console.log('Успешно загружено:', response);
+        await API.createPost(formData);
+
         allPostsFetch();
         handleCloseModal();
       }
@@ -97,7 +97,7 @@ const AddPhoto = ({
       }
     } catch (err) {
       const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
-      console.log(message);
+      console.error(message);
     }
   }, [
     allPostsFetch,
@@ -111,7 +111,6 @@ const AddPhoto = ({
     caption,
   ]);
 
-  console.log(caption);
   return (
     <dialog
       ref={dialogRef}

@@ -53,8 +53,7 @@ export const GetUserInfoProvider = ({ children }: { children: ReactNode }) => {
       setUserFriend(response);
     } catch (err) {
       const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
-      console.log(message);
-      localStorage.removeItem('token');
+      console.error(message);
     } finally {
       setLoading(false);
     }

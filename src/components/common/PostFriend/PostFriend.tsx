@@ -8,7 +8,7 @@ import {
 import { useLocation } from 'react-router-dom';
 import { MenuDotsIcon } from '@/assets/Icons/GeneralIcons';
 import { useState } from 'react';
-import type { PostType } from '@/context/GetAllPosts';
+import { type PostType } from '@/types';
 import routes from '@/utils/router';
 import MenuPhoto from '../../modal/MenuPhoto/MenuPhoto';
 
@@ -42,7 +42,7 @@ const PostFriend = ({ post }: { post: PostType }) => {
       {!isHideImage && (
         <img
           className={styles.post}
-          src={`http://localhost:4000${post.cover}`}
+          src={`http://localhost:4000${post.images[0]?.url}`}
           alt=""
         />
       )}
