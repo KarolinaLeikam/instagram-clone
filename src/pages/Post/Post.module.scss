@@ -5,12 +5,16 @@
 }
 
 .content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
   padding: 0 16px;
+  padding-bottom: 30px;
 }
 .footer {
   flex-shrink: 0;
