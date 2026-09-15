@@ -7,22 +7,13 @@ import {
   type Dispatch,
   type SetStateAction,
   type ReactNode,
+  useCallback,
 } from 'react';
 import { useParams } from 'react-router-dom';
+import { type ContextUserFriend } from '@/types/index';
+import { ApiError } from '@/utils/classError';
+import API from '@/utils/api';
 import { useAuth } from './AuthContext';
-
-interface ContextUserFriend {
-  id: string;
-  username: string;
-  name: string;
-  bio: string;
-  avatarUrl: string;
-  postsCount: number;
-  followersCount: number;
-  followingCount: number;
-  isFollowing: boolean;
-  isMe: boolean;
-}
 
 interface ContextType {
   userFriend: ContextUserFriend | null;
@@ -41,6 +32,8 @@ const initial: ContextType = {
 };
 const GetUserInfo = createContext<ContextType>(initial);
 
+const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
+
 export const GetUserInfoProvider = ({ children }: { children: ReactNode }) => {
   const [userFriend, setUserFriend] = useState<ContextUserFriend | null>(null);
   const [loading, setLoading] = useState(true);
@@ -48,45 +41,34 @@ export const GetUserInfoProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
 
   const whatIsUser = username || user?.username;
-  console.log(whatIsUser);
 
-  const fetchUserFriend = async () => {
-    setLoading(true);
-    const token = localStorage.getItem('token');
-    if (!token || !whatIsUser) {
-      setLoading(false);
+  const fetchUserFriend = useCallback(async () => {
+    if (!whatIsUser) {
       setUserFriend(null);
       return;
     }
+    setLoading(true);
     try {
-      const response = await fetch(
-        `http://localhost:4000/users/${whatIsUser}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`Ошибка: ${response.status}`);
-      }
-      const result = await response.json();
-      setUserFriend(result);
+      const response = await API.getUsernameInfo(whatIsUser);
+      setUserFriend(response);
     } catch (err) {
-      console.error(err);
+      const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
+      console.log(message);
       localStorage.removeItem('token');
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchUserFriend();
   }, [whatIsUser]);
 
-  const logout = () => {
+  useEffect(() => {
+    // eslint-disable-next-line
+    fetchUserFriend();
+  }, [fetchUserFriend]);
+
+  const logout = useCallback(() => {
     localStorage.removeItem('token');
     setUserFriend(null);
-    console.log('logout1');
-  };
+  }, []);
 
   const value = useMemo(
     () => ({
@@ -96,7 +78,7 @@ export const GetUserInfoProvider = ({ children }: { children: ReactNode }) => {
       logout,
       fetchUserFriend,
     }),
-    [userFriend, loading]
+    [userFriend, loading, logout, fetchUserFriend]
   );
 
   return <GetUserInfo.Provider value={value}>{children}</GetUserInfo.Provider>;
@@ -104,6 +86,5 @@ export const GetUserInfoProvider = ({ children }: { children: ReactNode }) => {
 
 export const useGetFriend = () => {
   const context = useContext(GetUserInfo);
-  console.log(context);
   return context || { userFriend: null, loading: false };
 };

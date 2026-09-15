@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useGetFriend } from '@/context/GetUserInfo';
 import { useAuth } from '@/context/AuthContext';
+import API from '@/utils/api';
+import { ApiError } from '@/utils/classError';
 import routes from '@/utils/router';
 import { Avatar, Button } from '@/components/ui';
 import { UserAddIcon } from '@/assets/Icons/GeneralIcons';
@@ -15,6 +17,8 @@ import {
 
 import styles from './Information.module.scss';
 
+const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
+
 const Information = () => {
   const { username } = useParams();
   const location = useLocation();
@@ -26,36 +30,24 @@ const Information = () => {
   );
 
   const whatIsUser = username || user?.username;
-  console.log(whatIsUser);
+
   useEffect(() => {
     if (userFriend) {
+      // eslint-disable-next-line
       setFollow(userFriend.isFollowing);
     }
   }, [userFriend]);
-  const handleToggleFollow = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
 
+  const handleToggleFollow = async () => {
     const method = follow ? 'DELETE' : 'POST';
 
     try {
-      const response = await fetch(
-        `http://localhost:4000/users/${whatIsUser}/follow`,
-        {
-          method,
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.ok) {
-        const result = await response.json();
-        setFollow(result);
-        fetchUserFriend();
-      }
+      const response = await API.followUser(method, whatIsUser);
+      setFollow(response.isFollowing);
+      fetchUserFriend();
     } catch (err) {
-      console.log(err);
+      const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
+      console.log(message);
     }
   };
 

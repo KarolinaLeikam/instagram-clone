@@ -28,7 +28,7 @@ const router = createBrowserRouter([
   {
     element: <ProtectedLayout />,
     children: [
-      { path: routes.signup, element: <Feed /> },
+      { path: routes.feed, element: <Feed /> },
       { path: routes.edit, element: <EditProfile /> },
       { path: routes.search, element: <SearchUsers /> },
       {

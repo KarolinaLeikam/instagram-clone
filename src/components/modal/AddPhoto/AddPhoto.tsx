@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom';
 import { CrossIcon } from '@/assets/Icons/GeneralIcons';
 import { Button } from '@/components/ui';
 import { usePosts } from '@/context/GetAllPosts';
+import API from '@/utils/api';
+import { ApiError } from '@/utils/classError';
 import routes from '@/utils/router';
 import { type StoriesModalProps } from '../Stories/StoriesModal';
 import styles from './AddPhoto.module.scss';
@@ -10,6 +12,8 @@ import styles from './AddPhoto.module.scss';
 interface AllModalProps extends StoriesModalProps {
   onFileSelected?: (file: File, previewUrl: string) => void;
 }
+
+const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
 
 const AddPhoto = ({
   isOpen,
@@ -74,28 +78,14 @@ const AddPhoto = ({
     }
 
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        return;
-      }
-
       if (isProfilePage) {
         const formData = new FormData();
         formData.append('images', selectedFile);
         if (caption) {
           formData.append('caption', caption);
         }
-
-        const response = await fetch('http://localhost:4000/posts', {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${token}` },
-          body: formData,
-        });
-        if (!response.ok) {
-          throw new Error('Ошибка при загрузке поста');
-        }
-        const data = await response.json();
-        console.log('Успешно загружено:', data);
+        const response = await API.createPost(formData);
+        console.log('Успешно загружено:', response);
         allPostsFetch();
         handleCloseModal();
       }
@@ -106,7 +96,8 @@ const AddPhoto = ({
         onMyClose();
       }
     } catch (err) {
-      console.error(err);
+      const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
+      console.log(message);
     }
   }, [
     allPostsFetch,

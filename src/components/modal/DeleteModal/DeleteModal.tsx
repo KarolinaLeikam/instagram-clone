@@ -1,7 +1,9 @@
 import { Button } from '@/components/ui';
 import { useEffect, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import type { PostType } from '@/context/GetAllPosts';
+import API from '@/utils/api';
+import { ApiError } from '@/utils/classError';
+import { type PostType } from '@/types';
 import { usePosts } from '@/context/GetAllPosts';
 import styles from './DeleteModal.module.scss';
 
@@ -10,6 +12,7 @@ interface Props {
   onCancel: () => void;
   post: PostType;
 }
+const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
 
 const DeleteModal = ({ isOpen, onCancel, post }: Props) => {
   const { allPostsFetch } = usePosts();
@@ -19,20 +22,12 @@ const DeleteModal = ({ isOpen, onCancel, post }: Props) => {
   const handleDeletePost = async () => {
     if (!user?.username) return;
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:4000/posts/${post.id}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`Ошибка сервера: ${response.status}`);
-      }
+      const response = await API.deletePost(post.id);
       allPostsFetch();
       onCancel();
     } catch (err) {
-      console.log(err);
+      const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
+      console.log(message);
     }
   };
 

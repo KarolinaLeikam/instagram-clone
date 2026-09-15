@@ -8,6 +8,8 @@ import {
   type SetStateAction,
   type ReactNode,
 } from 'react';
+import { ApiError } from '@/utils/classError';
+import API from '@/utils/api';
 
 interface UserType {
   id: string;
@@ -32,6 +34,8 @@ const initial: ContextType = {
   logout: () => {},
 };
 
+const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
+
 const AuthContext = createContext<ContextType>(initial);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -40,23 +44,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setLoading(false);
-        return;
-      }
       try {
-        const response = await fetch('http://localhost:4000/auth/me', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (!response.ok) {
-          throw new Error(`Ошибка: ${response.status}`);
-        }
-        const result = await response.json();
-        console.log(result);
-        setUser(result.user);
+        const response = await API.authMe();
+        setUser(response.user);
       } catch (err) {
-        console.error(err);
+        const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
+        console.log(message);
         localStorage.removeItem('token');
       } finally {
         setLoading(false);

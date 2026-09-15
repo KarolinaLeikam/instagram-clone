@@ -1,24 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import API from '@/utils/api';
+import { ApiError } from '@/utils/classError';
+import { type UserSearch } from '@/types/index';
 import routes from '@/utils/router';
 import { SearchIcon } from '@/assets/Icons/FooterIcons';
 import { CrossIcon } from '@/assets/Icons/GeneralIcons';
 
 import styles from './SearchUsers.module.scss';
 
-
-interface User {
-  id: 'string';
-  username: 'string';
-  name: 'string';
-  avatarUrl: 'string';
-}
+const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
 
 const SearchUsers = () => {
-  const [user, setUser] = useState<User[]>([]);
+  const [user, setUser] = useState<UserSearch[]>([]);
   const [searchResult, setSearchResult] = useState('');
-
-  console.log(user);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -27,25 +22,12 @@ const SearchUsers = () => {
         return;
       }
       const fetchSearch = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) return;
         try {
-          const response = await fetch(
-            `http://localhost:4000/users/search?q=${encodeURIComponent(searchResult)}`,
-            {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          if (response.ok) {
-            const result = await response.json();
-            setUser(result);
-          }
+          const response = await API.searchUser(searchResult);
+          setUser(response);
         } catch (err) {
-          console.log(err);
+          const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
+          console.log(message);
         }
       };
       fetchSearch();

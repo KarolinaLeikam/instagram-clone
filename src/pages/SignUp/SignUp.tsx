@@ -7,7 +7,8 @@ import {
   InstagramIcon,
 } from '@/assets/Icons/GeneralIcons';
 import AuthInput from '@/components/common/AuthInput/AuthInput';
-
+import { ApiError } from '@/utils/classError';
+import API from '@/utils/api';
 import { useState } from 'react';
 import { validationRules } from '@/utils/validation';
 import styles from './SignUp.module.scss';
@@ -19,10 +20,13 @@ export interface FormInput {
   password: string;
 }
 
+const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
+
 const SignUp = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isValid },
   } = useForm<FormInput>({
     mode: 'onChange',
@@ -38,30 +42,19 @@ const SignUp = () => {
 
   const onSubmit: SubmitHandler<FormInput> = async (data) => {
     try {
-      const path = 'http://localhost:4000';
-      const body = JSON.stringify({
+      const body = {
         email: data.mail,
         username: data.userName,
         name: data.fullName,
         password: data.password,
-      });
-      const response = await fetch(`${path}/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body,
-      });
-      if (!response.ok) {
-        throw new Error('Ошибка регистрации');
-      }
-
-      const result = await response.json();
-      localStorage.setItem('token', result.token);
-      console.log(result);
-
-      navigate('/');
+      };
+      const response = await API.signUp(body);
+      localStorage.setItem('token', response.token);
+      console.log('process');
+      navigate(routes.feed);
     } catch (err) {
-      console.error('Ошибка регистрации:', err);
-      alert('Что-то пошло не так, попробуйте снова');
+      const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
+      setError('root', { message });
     }
   };
 
@@ -120,6 +113,9 @@ const SignUp = () => {
             <EyeIcon className={styles.icons} onClick={togglePassword} />
           )}
         </div>
+        {errors.root && (
+          <p className={styles.formError}>{errors.root.message}</p>
+        )}
         <input
           type="submit"
           value="Sign up"

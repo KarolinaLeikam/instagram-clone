@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { type IFormValues } from '@/types/index';
+import API from '@/utils/api';
+import { ApiError } from '@/utils/classError';
 import routes from '@/utils/router';
 import { AngleLeftIcon } from '@/assets/Icons/GeneralIcons';
 import AvatarImg from '@/assets/Images/Avatar.jpg';
@@ -9,12 +12,7 @@ import { StatusBar } from '@/components/common';
 import AddPhoto from '@/components/modal/AddPhoto/AddPhoto';
 import styles from './EditProfile.module.scss';
 
-interface IFormValues {
-  name: string;
-  username: string;
-  bio: string;
-}
-
+const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
 const EditProfile = () => {
   const navigate = useNavigate();
   const { user, setUser } = useAuth();
@@ -35,10 +33,6 @@ const EditProfile = () => {
   };
 
   const onSubmit = async (data: IFormValues) => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      return;
-    }
     try {
       const formData = new FormData();
       formData.append('name', data.name);
@@ -46,19 +40,12 @@ const EditProfile = () => {
       if (avatarFile) {
         formData.append('avatar', avatarFile);
       }
-      const response = await fetch('http://localhost:4000/users/me', {
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      const result = await response.json();
-      setUser(result.user ?? result);
+      const response = await API.editInfo(formData);
+      setUser(response.user ?? response);
       navigate(routes.profileOwn);
     } catch (err) {
-      console.log(err);
+      const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
+      console.log(message);
     }
   };
   return (
