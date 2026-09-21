@@ -11,7 +11,7 @@ import {
 } from 'react';
 import { useParams } from 'react-router-dom';
 import { type ContextUserFriend } from '@/types/index';
-import { ApiError } from '@/utils/classError';
+import { ApiError } from '@/utils/error/classError';
 import API from '@/utils/api';
 import { useAuth } from './AuthContext';
 

@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 import API from '@/utils/api';
-import { ApiError } from '@/utils/classError';
+import { ApiError } from '@/utils/error/classError';
 import { type PostType } from '@/types';
 import { useAuth } from './AuthContext';
 

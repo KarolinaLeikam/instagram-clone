@@ -5,7 +5,7 @@ import {
   type FollowResponse,
   type UserSearch,
 } from '@/types';
-import { ApiError } from './classError';
+import { ApiError } from './error/classError';
 
 class ApiClient {
   private readonly baseURL: string;

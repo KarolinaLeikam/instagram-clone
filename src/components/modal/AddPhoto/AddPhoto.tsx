@@ -4,7 +4,7 @@ import { CrossIcon } from '@/assets/Icons/GeneralIcons';
 import { Button } from '@/components/ui';
 import { usePosts } from '@/context/GetAllPosts';
 import API from '@/utils/api';
-import { ApiError } from '@/utils/classError';
+import { ApiError } from '@/utils/error/classError';
 import routes from '@/utils/router';
 import { type StoriesModalProps } from '../Stories/StoriesModal';
 import styles from './AddPhoto.module.scss';

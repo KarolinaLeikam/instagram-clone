@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import API from '@/utils/api';
-import { ApiError } from '@/utils/classError';
+import { ApiError } from '@/utils/error/classError';
 import { type UserSearch } from '@/types/index';
 import routes from '@/utils/router';
 import { SearchIcon } from '@/assets/Icons/FooterIcons';

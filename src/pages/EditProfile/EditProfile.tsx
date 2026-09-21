@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { type IFormValues } from '@/types/index';
 import API from '@/utils/api';
-import { ApiError } from '@/utils/classError';
+import { ApiError } from '@/utils/error/classError';
 import routes from '@/utils/router';
 import { AngleLeftIcon } from '@/assets/Icons/GeneralIcons';
 import AvatarImg from '@/assets/Images/Avatar.jpg';

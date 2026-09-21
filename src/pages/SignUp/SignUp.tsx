@@ -7,10 +7,10 @@ import {
   InstagramIcon,
 } from '@/assets/Icons/GeneralIcons';
 import AuthInput from '@/components/common/AuthInput/AuthInput';
-import { ApiError } from '@/utils/classError';
+import { ApiError } from '@/utils/error/classError';
 import API from '@/utils/api';
 import { useState } from 'react';
-import { validationRules } from '@/utils/validation';
+import { validationRules } from '@/utils/validation/validation';
 import styles from './SignUp.module.scss';
 
 export interface FormInput {

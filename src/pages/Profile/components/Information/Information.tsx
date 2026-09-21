@@ -3,7 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import { useGetFriend } from '@/context/GetUserInfo';
 import { useAuth } from '@/context/AuthContext';
 import API from '@/utils/api';
-import { ApiError } from '@/utils/classError';
+import { ApiError } from '@/utils/error/classError';
 import routes from '@/utils/router';
 import { Avatar, Button } from '@/components/ui';
 import { UserAddIcon } from '@/assets/Icons/GeneralIcons';

@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from 'react';
 import { type UserType } from '@/types';
-import { ApiError } from '@/utils/classError';
+import { ApiError } from '@/utils/error/classError';
 import API from '@/utils/api';
 
 interface ContextType {

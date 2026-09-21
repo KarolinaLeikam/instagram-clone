@@ -4,7 +4,7 @@ import { Button } from '@/components/ui';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import routes from '@/utils/router';
 import AuthInput from '@/components/common/AuthInput/AuthInput';
-import { validationRules } from '@/utils/validation';
+import { validationRules } from '@/utils/validation/validation';
 import {
   EyeClosedIcon,
   EyeIcon,
@@ -12,7 +12,7 @@ import {
 } from '@/assets/Icons/GeneralIcons';
 
 import API from '@/utils/api';
-import { ApiError } from '@/utils/classError';
+import { ApiError } from '@/utils/error/classError';
 import styles from './Login.module.scss';
 
 interface LoginForm {

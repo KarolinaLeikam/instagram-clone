@@ -2,7 +2,7 @@ import { Button } from '@/components/ui';
 import { useEffect, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import API from '@/utils/api';
-import { ApiError } from '@/utils/classError';
+import { ApiError } from '@/utils/error/classError';
 import { type PostType } from '@/types';
 import { usePosts } from '@/context/GetAllPosts';
 import styles from './DeleteModal.module.scss';
