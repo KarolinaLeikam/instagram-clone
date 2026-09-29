@@ -10,6 +10,7 @@ import API from '@/utils/api';
 import { ApiError } from '@/utils/error/classError';
 import { type PostType } from '@/types';
 import { useAuth } from './AuthContext';
+import { useGetAllPostsQuery } from '@/utils/rtkApi';
 
 const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
 
@@ -27,6 +28,12 @@ const PostsContext = createContext<ContextType>(initial);
 export const GetAllPosts = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const [posts, setPosts] = useState<PostType[]>([]);
+
+  const { data, error, isLoading } = useGetAllPostsQuery();
+
+  console.log('data', data);
+  console.log('error', error);
+  console.log('isLoading', isLoading);
 
   const allPostsFetch = useCallback(
     async (username?: string) => {
