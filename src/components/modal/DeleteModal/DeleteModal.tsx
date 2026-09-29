@@ -1,10 +1,8 @@
 import { Button } from '@/components/ui';
 import { useEffect, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import API from '@/utils/api';
-import { ApiError } from '@/utils/error/classError';
+import { useDeletePostMutation } from '@/redux/slices/allPosts';
 import { type PostType } from '@/types';
-import { usePosts } from '@/context/GetAllPosts';
 import styles from './DeleteModal.module.scss';
 
 interface Props {
@@ -12,22 +10,22 @@ interface Props {
   onCancel: () => void;
   post: PostType;
 }
-const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
 
 const DeleteModal = ({ isOpen, onCancel, post }: Props) => {
-  const { allPostsFetch } = usePosts();
+  const [deletePost] = useDeletePostMutation();
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const { user } = useAuth();
 
   const handleDeletePost = async () => {
     if (!user?.username) return;
     try {
-      await API.deletePost(post.id);
-      allPostsFetch();
+      await deletePost(post.id).unwrap();
+      // allPostsFetch() тут раньше стоял вручную. Теперь его нет —
+      // invalidatesTags: ['Posts'] у deletePost-мутации (allPosts.ts)
+      // сам обновит список везде, где он сейчас показан на экране.
       onCancel();
     } catch (err) {
-      const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
-      console.error(message);
+      console.error(err);
     }
   };
 

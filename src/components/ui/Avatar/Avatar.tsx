@@ -3,7 +3,6 @@ import { PlusSmallIcon } from '@/assets/Icons/GeneralIcons';
 import { useAuth } from '@/context/AuthContext';
 import { useGetFriend } from '@/context/GetUserInfo';
 import styles from './Avatar.module.scss';
-import { useState } from 'react';
 
 interface AvatarProps {
   className?: string;

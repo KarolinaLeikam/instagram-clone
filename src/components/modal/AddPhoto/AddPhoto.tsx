@@ -2,9 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { CrossIcon } from '@/assets/Icons/GeneralIcons';
 import { Button } from '@/components/ui';
-import { usePosts } from '@/context/GetAllPosts';
-import API from '@/utils/api';
-import { ApiError } from '@/utils/error/classError';
+import { useCreatePostMutation } from '@/redux/slices/allPosts';
 import routes from '@/utils/router';
 import { type StoriesModalProps } from '../Stories/StoriesModal';
 import styles from './AddPhoto.module.scss';
@@ -12,8 +10,6 @@ import styles from './AddPhoto.module.scss';
 interface AllModalProps extends StoriesModalProps {
   onFileSelected?: (file: File, previewUrl: string) => void;
 }
-
-const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
 
 const AddPhoto = ({
   isOpen,
@@ -28,7 +24,11 @@ const AddPhoto = ({
   const [caption, setCaption] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const { allPostsFetch } = usePosts();
+  // useCreatePostMutation() — хук, который createApi сгенерировал сам,
+  // по имени endpoint'а createPost. Возвращает МАССИВ (кортеж) из двух
+  // элементов: [функция-триггер, объект со статусом запроса]. Нам тут
+  // нужна только сама функция — вызываем её, когда хотим отправить пост.
+  const [createPost] = useCreatePostMutation();
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -84,9 +84,21 @@ const AddPhoto = ({
         if (caption) {
           formData.append('caption', caption);
         }
-        await API.createPost(formData);
 
-        allPostsFetch();
+        // createPost(...) — вызов триггера. Он не возвращает готовые
+        // данные напрямую, а возвращает "thenable"-объект с методом
+        // .unwrap(). Без .unwrap() ошибка запроса не попала бы в catch —
+        // мутация "проглатывает" ошибку внутрь своего состояния
+        // (isError/error), а .unwrap() снова превращает её в обычный
+        // reject промиса, поэтому наш try/catch продолжает работать
+        // так же, как работал со старым API.createPost(...).
+        await createPost(formData).unwrap();
+
+        // Раньше тут стоял allPostsFetch() — ручной перезапрос списка
+        // постов. Теперь он не нужен: invalidatesTags: ['Posts'] в
+        // самой мутации (allPosts.ts) сам скажет RTK Query "список
+        // постов устарел", и все активные useGetPostsByNameQuery сами
+        // перезапросят данные — где бы они сейчас ни были на экране.
         handleCloseModal();
       }
       if (isEditPage) {
@@ -96,11 +108,15 @@ const AddPhoto = ({
         onMyClose();
       }
     } catch (err) {
-      const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
-      console.error(message);
+      // err тут — уже готовая строка (тот самый err.code/FALLBACK_ERROR,
+      // который мы посчитали внутри queryFn в allPosts.ts). Отдельный
+      // instanceof ApiError тут больше не нужен — вся эта проверка
+      // теперь живёт в одном месте (в слайсе), а не размазана по всем
+      // компонентам, которые ходят за постами.
+      console.error(err);
     }
   }, [
-    allPostsFetch,
+    createPost,
     handleCloseModal,
     onFileSelected,
     onMyClose,

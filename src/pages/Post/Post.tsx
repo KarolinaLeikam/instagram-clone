@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { usePosts } from '@/context/GetAllPosts';
+import { useGetPostsByNameQuery } from '@/redux/slices/allPosts';
 import { Footer, StatusBar } from '@/components/common';
 import PostFriend from '@/components/common/PostFriend/PostFriend';
 import HeaderPublication from './components/HeaderPublication/HeaderPublication';
@@ -10,18 +10,17 @@ import styles from './Post.module.scss';
 
 const Post = () => {
   const { user } = useAuth();
-  const { allPostsFetch, posts } = usePosts();
+  // Раньше был useEffect с ручной проверкой "if (!user?.username) return".
+  // { skip: !user?.username } делает то же самое декларативно: запрос
+  // просто не уйдёт, пока имя пользователя не подгрузилось из AuthContext.
+  const { data: posts = [] } = useGetPostsByNameQuery(user?.username, {
+    skip: !user?.username,
+  });
   const location = useLocation();
 
   const selectedPostId: string = location.state?.selectedPostId;
 
   const postRefs = useRef<Record<string, HTMLDivElement | null>>({});
-
-  useEffect(() => {
-    if (!user?.username) return;
-
-    allPostsFetch();
-  }, [user?.username, allPostsFetch]);
 
   useEffect(() => {
     if (selectedPostId && postRefs.current[selectedPostId]) {
