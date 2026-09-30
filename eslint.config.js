@@ -7,7 +7,9 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default [
   {
-    ignores: ['dist', 'node_modules'],
+    // cypress/ живёт вне src, использует свои глобалы (cy, Cypress) и
+    // свой отдельный tsconfig — airbnb-правила проекта тут не применимы
+    ignores: ['dist', 'node_modules', 'cypress/**', 'cypress.config.ts'],
   },
 
   // Base JS recommended
@@ -65,16 +67,27 @@ export default [
       // TS handles these — airbnb defaults redundant here
       'react/prop-types': 'off',
       // React 19 dropped defaultProps for fn components — use default args
-      'react/require-default-props': [
-        'error',
-        { functions: 'defaultArguments' },
-      ],
+      'react/require-default-props': 'off',
       'import-x/extensions': [
         'error',
         'ignorePackages',
         { ts: 'never', tsx: 'never' },
       ],
       'import-x/no-unresolved': ['error', { ignore: ['\\?react$'] }],
+      '@typescript-eslint/no-explicit-any': 'error',
+      // Prisma's `_count` relation aggregate — not renameable
+      'no-underscore-dangle': ['error', { allow: ['_count'] }],
+    },
+  },
+
+  // Test files + vitest config may import devDependencies
+  {
+    files: ['**/*.test.{ts,tsx}', 'src/test/**', 'vite.config.ts'],
+    rules: {
+      'import-x/no-extraneous-dependencies': [
+        'error',
+        { devDependencies: true },
+      ],
     },
   },
 
