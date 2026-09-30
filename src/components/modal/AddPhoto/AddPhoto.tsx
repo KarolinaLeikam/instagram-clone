@@ -2,9 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { CrossIcon } from '@/assets/Icons/GeneralIcons';
 import { Button } from '@/components/ui';
-import { usePosts } from '@/context/GetAllPosts';
-import API from '@/utils/api';
-import { ApiError } from '@/utils/error/classError';
+import { useCreatePostMutation } from '@/redux/slices/postsSlice';
 import routes from '@/utils/router';
 import { type StoriesModalProps } from '../Stories/StoriesModal';
 import styles from './AddPhoto.module.scss';
@@ -12,8 +10,6 @@ import styles from './AddPhoto.module.scss';
 interface AllModalProps extends StoriesModalProps {
   onFileSelected?: (file: File, previewUrl: string) => void;
 }
-
-const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
 
 const AddPhoto = ({
   isOpen,
@@ -28,7 +24,7 @@ const AddPhoto = ({
   const [caption, setCaption] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const { allPostsFetch } = usePosts();
+  const [createPost] = useCreatePostMutation();
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -84,9 +80,9 @@ const AddPhoto = ({
         if (caption) {
           formData.append('caption', caption);
         }
-        await API.createPost(formData);
+        await createPost(formData).unwrap();
 
-        allPostsFetch();
+        // allPostsFetch();
         handleCloseModal();
       }
       if (isEditPage) {
@@ -96,11 +92,10 @@ const AddPhoto = ({
         onMyClose();
       }
     } catch (err) {
-      const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
-      console.error(message);
+      console.error(err);
     }
   }, [
-    allPostsFetch,
+    createPost,
     handleCloseModal,
     onFileSelected,
     onMyClose,

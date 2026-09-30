@@ -1,15 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { userReducer } from '@/redux/slices/slice';
-import { rtkApi } from '@/utils/rtkApi';
 import { setupListeners } from '@reduxjs/toolkit/query/react';
+import { postsSlice } from './slices/postsSlice';
 
-export const store = configureStore({
-  reducer: { user: userReducer, [rtkApi.reducerPath]: rtkApi.reducer },
+const store = configureStore({
+  reducer: {
+    [postsSlice.reducerPath]: postsSlice.reducer,
+  },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(rtkApi.middleware),
+    getDefaultMiddleware().concat(postsSlice.middleware),
 });
 
 setupListeners(store.dispatch);
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export default store;

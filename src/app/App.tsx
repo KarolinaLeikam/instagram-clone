@@ -10,7 +10,6 @@ import Login from '@/pages/Login/Login';
 import SignUp from '@/pages/SignUp/SignUp';
 import EditProfile from '@/pages/EditProfile/EditProfile';
 import SearchUsers from '@/pages/SearchUsers/SearchUsers';
-import { GetAllPosts } from '@/context/GetAllPosts';
 import routes from '@/utils/router';
 import ProtectedLayout from './componentsProvider/ProtectedLayout';
 import './styles/index.js';
@@ -40,11 +39,7 @@ const router = createBrowserRouter([
       },
       {
         path: routes.post,
-        element: (
-          <GetAllPosts>
-            <Post />
-          </GetAllPosts>
-        ),
+        element: <Post />,
       },
     ],
   },
