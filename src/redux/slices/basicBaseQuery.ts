@@ -30,7 +30,7 @@ const baseQueryWithReauth: BaseQueryFn<
       console.error(' Ошибка авторизации ');
       localStorage.removeItem('token');
     }
-    if (status === 0) {
+    if (status === 0 || status === 'FETCH_ERROR') {
       console.error(' Нет сети ');
     }
   }

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { CrossIcon } from '@/assets/Icons/GeneralIcons';
+import getErrorMessage from '@/utils/getErrorMessage';
 import { Button } from '@/components/ui';
 import { useCreatePostMutation } from '@/redux/slices/postsSlice';
 import routes from '@/utils/router';
@@ -24,7 +25,7 @@ const AddPhoto = ({
   const [caption, setCaption] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [createPost] = useCreatePostMutation();
+  const [createPost, { error, reset }] = useCreatePostMutation();
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -61,8 +62,9 @@ const AddPhoto = ({
       setPreviewUrl(null);
       setSelectedFile(null);
     }
+    reset();
     onMyClose();
-  }, [previewUrl, onMyClose]);
+  }, [previewUrl, onMyClose, reset]);
 
   const isProfilePage = location.pathname.includes(routes.profileOwn);
   const isEditPage = location.pathname.includes(routes.edit);
@@ -143,6 +145,7 @@ const AddPhoto = ({
                 </div>
               )}
               <Button onClick={fetchPost}>Загрузить фото</Button>
+              {error && <div>{getErrorMessage(error)}</div>}
             </div>
           )}
         </div>

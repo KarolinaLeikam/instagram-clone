@@ -21,7 +21,7 @@ const DeleteModal = ({ isOpen, onCancel, post }: Props) => {
   const handleDeletePost = async () => {
     if (!user?.username) return;
     try {
-      await deletePost(post.id).unwrap();
+      await deletePost(post.id);
       // API.deletePost(post.id);
       // allPostsFetch();
       onCancel();
