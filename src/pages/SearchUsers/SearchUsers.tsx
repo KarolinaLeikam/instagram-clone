@@ -50,7 +50,7 @@ const SearchUsers = () => {
       <Link to={routes.profileOwn}>Return</Link>
       <div>
         {user.map((u) => (
-          <Link to={`${routes.profileOwn}${u.username}`} key={u.id}>
+          <Link to={`${routes.profileOwn}/${u.username}`} key={u.id}>
             <p>{u.username}</p>
           </Link>
         ))}
