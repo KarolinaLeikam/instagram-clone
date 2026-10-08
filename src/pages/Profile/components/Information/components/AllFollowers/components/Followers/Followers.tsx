@@ -1,7 +1,7 @@
 import styles from './Followers.module.scss';
 
 interface FollowersProps {
-  number: number | string;
+  number: number | undefined;
   nameColumn: string;
 }
 

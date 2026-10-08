@@ -5,6 +5,10 @@ import CarouselIcon from './carousel.svg?react';
 import UserAddIcon from './user-add.svg?react';
 import PlusSmallIcon from './plus-small.svg?react';
 import AngleLeftIcon from './angle-left.svg?react';
+import CrossIcon from './cross.svg?react';
+import EyeIcon from './eye.svg?react';
+import EyeClosedIcon from './eye-closed.svg?react';
+import InstagramIcon from './instagram.svg?react';
 
 export {
   MenuDotsIcon,
@@ -14,4 +18,8 @@ export {
   UserAddIcon,
   PlusSmallIcon,
   AngleLeftIcon,
+  CrossIcon,
+  EyeIcon,
+  EyeClosedIcon,
+  InstagramIcon,
 };

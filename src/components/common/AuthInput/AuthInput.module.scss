@@ -1,0 +1,19 @@
+.input {
+  background-color: rgb(232, 230, 230, 40%);
+  color: #b0b0b0;
+  border-radius: 7px;
+  height: 32px;
+  font-size: 13px;
+  font-weight: 500;
+  width: 50vh;
+  border: 1px solid #e0dddd;
+}
+
+.error {
+  color: red;
+}
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

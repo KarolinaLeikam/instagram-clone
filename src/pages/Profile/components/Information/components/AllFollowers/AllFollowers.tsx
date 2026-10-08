@@ -1,11 +1,20 @@
+import useProfileUsername from '@/hooks/useProfileUsername';
+import { useGetUserInfoQuery } from '@/redux/slices/userInfoSlice';
 import Followers from './components/Followers/Followers';
 import styles from './AllFollowers.module.scss';
 
-const AllFollowers = () => (
-  <div className={styles.container}>
-    <Followers nameColumn="Publications" number={153} />
-    <Followers nameColumn="Followers" number={209} />
-    <Followers nameColumn="Suivi(e)s" number={109} />
-  </div>
-);
+const AllFollowers = () => {
+  const whatIsUser = useProfileUsername();
+  const { data: userData } = useGetUserInfoQuery(whatIsUser ?? '', {
+    skip: !whatIsUser,
+  });
+
+  return (
+    <div className={styles.container}>
+      <Followers nameColumn="Posts" number={userData?.postsCount} />
+      <Followers nameColumn="Followers" number={userData?.followersCount} />
+      <Followers nameColumn="Following" number={userData?.followingCount} />
+    </div>
+  );
+};
 export default AllFollowers;

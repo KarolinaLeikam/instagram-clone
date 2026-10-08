@@ -1,0 +1,21 @@
+.dialog {
+  border: none;
+  width: 70vw;
+  height: 30vh;
+
+}
+.containerBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.btnDelete {
+  color: red;
+  width: 80%;
+}
+
+.btnCancel {
+  width: 80%;
+}

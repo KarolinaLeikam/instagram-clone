@@ -1,28 +1,41 @@
 import { Link } from 'react-router-dom';
+import { useAuthMeQuery } from '@/redux/slices/authSlice';
 import {
   HomeIcon,
   PlayAltIcon,
   SearchIcon,
   ShopBagIcon,
 } from '@/assets/Icons/FooterIcons';
-import AvatarImg from '@/assets/Images/Avatar.jpg';
+import routes from '@/utils/router';
+
 import styles from './Footer.module.scss';
 
-const Footer = () => (
-  <div className={styles.container}>
-    <div className={styles.contentImg}>
-      <Link to="/">
-        <HomeIcon />
-      </Link>
-      <PlayAltIcon />
-      <SearchIcon />
-      <ShopBagIcon />
-      <Link to="/profile">
-        <div className={styles.circle}>
-          <img className={styles.AvatarImg} src={AvatarImg} alt="" />
-        </div>
-      </Link>
+const Footer = () => {
+  const { data: user } = useAuthMeQuery();
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.contentImg}>
+        <Link to={routes.feed}>
+          <HomeIcon />
+        </Link>
+        <PlayAltIcon />
+        <Link to={routes.search}>
+          <SearchIcon />
+        </Link>
+        <ShopBagIcon />
+        <Link to={routes.profileOwn}>
+          <div className={styles.circle}>
+            <img
+              className={styles.AvatarImg}
+              src={`http://localhost:4000${user?.user.avatarUrl}`}
+              alt=""
+            />
+          </div>
+        </Link>
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
 export default Footer;
