@@ -1,10 +1,10 @@
-import { useAuth } from '@/context/AuthContext';
 import {
   BookMarkIcon,
   CommentIcon,
   HeartIcon,
   PlaneIcon,
 } from '@/assets/Icons/InterectionIcons';
+import { useAuthMeQuery } from '@/redux/slices/authSlice';
 import { useLocation } from 'react-router-dom';
 import { MenuDotsIcon } from '@/assets/Icons/GeneralIcons';
 import { useState } from 'react';
@@ -16,7 +16,7 @@ import styles from './PostFriend.module.scss';
 
 const PostFriend = ({ post }: { post: PostType }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const { user } = useAuth();
+  const { data: user } = useAuthMeQuery();
 
   const location = useLocation();
   const isHideImage = location.pathname === routes.feed;
@@ -26,10 +26,10 @@ const PostFriend = ({ post }: { post: PostType }) => {
         <div className={styles.containerAvatarName}>
           <img
             className={styles.friendAvatar}
-            src={`http://localhost:4000${user?.avatarUrl}`}
+            src={`http://localhost:4000${user?.user.avatarUrl}`}
             alt=""
           />
-          <h3>{user?.username}</h3>
+          <h3>{user?.user.username}</h3>
         </div>
         <MenuDotsIcon onClick={() => setModalOpen(true)} />
         <MenuPhoto
@@ -62,7 +62,7 @@ const PostFriend = ({ post }: { post: PostType }) => {
       </div>
       <h3 className={styles.likes}>33 Likes</h3>
       <div className={styles.text}>
-        <h3>{user?.username}</h3>
+        <h3>{user?.user.username}</h3>
         <p>{post.caption}</p>
       </div>
     </div>

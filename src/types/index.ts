@@ -7,6 +7,17 @@ export interface UserType {
   avatarUrl: string;
   createdAt: string;
 }
+export interface AuthResponse {
+  token: string;
+  user: UserType;
+}
+
+export interface UserData {
+  email: string;
+  username: string;
+  name: string;
+  password: string;
+}
 
 export interface PostType {
   id: string;

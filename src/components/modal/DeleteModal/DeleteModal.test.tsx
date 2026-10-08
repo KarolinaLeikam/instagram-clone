@@ -2,19 +2,16 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { PostType } from '@/types';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthMeQuery } from '@/redux/slices/authSlice';
 import { useDeletePostMutation } from '@/redux/slices/postsSlice';
 import DeleteModal from './DeleteModal';
 
 // Говорим vitest: "везде, где импортируется этот путь — подставь
 // автоматически сгенерированную подделку вместо настоящего модуля".
-// Настоящий useAuth ходит за реальным пользователем через API.authMe() —
-// в тесте нам это не нужно и не должно работать, мы хотим управлять
-// значением user сами.
-vi.mock('@/context/AuthContext');
-// useDeletePostMutation — хук, сгенерированный RTK Query (postsSlice.ts).
-// Мокаем весь модуль целиком — тогда реального похода в Redux-стор не
+// useAuthMeQuery теперь RTK Query хук (authSlice.ts), не контекст —
+// мокаем модуль целиком, тогда реального похода в Redux-стор не
 // происходит, и <Provider store={...}> в рендере теста не нужен.
+vi.mock('@/redux/slices/authSlice');
 vi.mock('@/redux/slices/postsSlice');
 
 // Минимальный объект PostType — DeleteModal использует только post.id,
@@ -40,27 +37,28 @@ describe('DeleteModal', () => {
   // beforeEach выполняется перед КАЖДЫМ it. Здесь мы:
   // 1) очищаем счётчики вызовов моков от предыдущего теста
   //    (иначе toHaveBeenCalledTimes(1) во втором тесте увидит вызовы из первого)
-  // 2) заново задаём, что должны возвращать useAuth() и useDeletePostMutation(),
+  // 2) заново задаём, что должны возвращать useAuthMeQuery() и useDeletePostMutation(),
   //    когда их вызовет компонент DeleteModal
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // vi.mocked(...) — это просто подсказка TypeScript'у "здесь мокнутая функция",
-    // чтобы дать методы .mockReturnValue и т.п. с проверкой типов.
-    vi.mocked(useAuth).mockReturnValue({
-      user: {
-        id: 'u1',
-        email: 'a@a.com',
-        username: 'karolina',
-        name: 'Karolina',
-        bio: '',
-        avatarUrl: '',
-        createdAt: '2026-01-01',
+    // Реальный authMe-эндпоинт возвращает { user: UserType } — то есть
+    // data у хука выглядит как { user: {...} }, НЕ как плоский {...}.
+    // Мокаем именно эту форму, а не ту, что ожидает компонент — если
+    // компонент читает её неправильно, тест должен упасть и показать это.
+    vi.mocked(useAuthMeQuery).mockReturnValue({
+      data: {
+        user: {
+          id: 'u1',
+          email: 'a@a.com',
+          username: 'karolina',
+          name: 'Karolina',
+          bio: '',
+          avatarUrl: '',
+          createdAt: '2026-01-01',
+        },
       },
-      setUser: vi.fn(),
-      loading: false,
-      logout: vi.fn(),
-    });
+    } as unknown as ReturnType<typeof useAuthMeQuery>);
 
     // Компонент делает: await deletePost(post.id).unwrap()
     // Значит вызов deletePostTrigger(...) должен вернуть объект

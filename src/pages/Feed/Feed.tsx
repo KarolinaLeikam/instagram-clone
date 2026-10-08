@@ -3,16 +3,15 @@ import Footer from '@/components/common/Footer/Footer';
 import StatusBar from '@/components/common/StatusBar/StatusBar';
 import StoriesHeader from '@/pages/Feed/components/StoriesHeader/StoriesHeader';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+
 import routes from '@/utils/router';
 import styles from './Feed.module.scss';
 
 const Feed = () => {
-  const { logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
+    localStorage.removeItem('token');
     navigate(routes.login);
   };
 

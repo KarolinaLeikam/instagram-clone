@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import API from '@/utils/api';
-import { ApiError } from '@/utils/error/classError';
+import { useSearchUserQuery } from '@/redux/slices/userInfoSlice';
 import { type UserSearch } from '@/types/index';
 import routes from '@/utils/router';
 import { SearchIcon } from '@/assets/Icons/FooterIcons';
@@ -9,31 +8,21 @@ import { CrossIcon } from '@/assets/Icons/GeneralIcons';
 
 import styles from './SearchUsers.module.scss';
 
-const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
-
 const SearchUsers = () => {
   const [user, setUser] = useState<UserSearch[]>([]);
   const [searchResult, setSearchResult] = useState('');
 
+  const { data: userSearch = [] } = useSearchUserQuery(searchResult);
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (!searchResult.trim()) {
         setUser([]);
         return;
       }
-      const fetchSearch = async () => {
-        try {
-          const response = await API.searchUser(searchResult);
-          setUser(response);
-        } catch (err) {
-          const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
-          console.error(message);
-        }
-      };
-      fetchSearch();
+      setUser(userSearch);
     }, 700);
     return () => clearTimeout(timeoutId);
-  }, [searchResult]);
+  }, [searchResult, userSearch]);
 
   return (
     <div className={styles.root}>

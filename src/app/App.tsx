@@ -4,8 +4,8 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import Feed from '@/pages/Feed/Feed';
-import ProfileProvider from '@/app/componentsProvider/ProfileProvider';
 import Post from '@/pages/Post/Post';
+import Profile from '@/pages/Profile/Profile';
 import Login from '@/pages/Login/Login';
 import SignUp from '@/pages/SignUp/SignUp';
 import EditProfile from '@/pages/EditProfile/EditProfile';
@@ -31,11 +31,11 @@ const router = createBrowserRouter([
       { path: routes.search, element: <SearchUsers /> },
       {
         path: routes.profileUser,
-        element: <ProfileProvider />,
+        element: <Profile />,
       },
       {
         path: routes.profileOwn,
-        element: <ProfileProvider />,
+        element: <Profile />,
       },
       {
         path: routes.post,

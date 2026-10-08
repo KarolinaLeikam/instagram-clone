@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthMeQuery } from '@/redux/slices/authSlice';
 import ProtectedRoute from './ProtectedRoute';
 
-// Мокаем реальный useAuth — управляем его ответом сами в каждом тесте.
-vi.mock('@/context/AuthContext');
+// Мокаем RTK Query хук — управляем его ответом сами в каждом тесте.
+vi.mock('@/redux/slices/authSlice');
 
 describe('ProtectedRoute', () => {
   beforeEach(() => {
@@ -13,12 +13,10 @@ describe('ProtectedRoute', () => {
   });
 
   it('показывает спиннер, пока идёт загрузка', () => {
-    vi.mocked(useAuth).mockReturnValue({
-      user: null,
-      loading: true,
-      setUser: vi.fn(),
-      logout: vi.fn(),
-    });
+    vi.mocked(useAuthMeQuery).mockReturnValue({
+      data: undefined,
+      isLoading: true,
+    } as unknown as ReturnType<typeof useAuthMeQuery>);
 
     render(
       <MemoryRouter>
@@ -35,12 +33,10 @@ describe('ProtectedRoute', () => {
   });
 
   it('не показывает children, если загрузка завершена, а user нет (редирект)', () => {
-    vi.mocked(useAuth).mockReturnValue({
-      user: null,
-      loading: false,
-      setUser: vi.fn(),
-      logout: vi.fn(),
-    });
+    vi.mocked(useAuthMeQuery).mockReturnValue({
+      data: undefined,
+      isLoading: false,
+    } as unknown as ReturnType<typeof useAuthMeQuery>);
 
     render(
       <MemoryRouter>
@@ -56,20 +52,20 @@ describe('ProtectedRoute', () => {
   });
 
   it('рендерит children, если user есть', () => {
-    vi.mocked(useAuth).mockReturnValue({
-      user: {
-        id: 'u1',
-        email: 'a@a.com',
-        username: 'karolina',
-        name: 'Karolina',
-        bio: '',
-        avatarUrl: '',
-        createdAt: '2026-01-01',
+    vi.mocked(useAuthMeQuery).mockReturnValue({
+      data: {
+        user: {
+          id: 'u1',
+          email: 'a@a.com',
+          username: 'karolina',
+          name: 'Karolina',
+          bio: '',
+          avatarUrl: '',
+          createdAt: '2026-01-01',
+        },
       },
-      loading: false,
-      setUser: vi.fn(),
-      logout: vi.fn(),
-    });
+      isLoading: false,
+    } as unknown as ReturnType<typeof useAuthMeQuery>);
 
     render(
       <MemoryRouter>

@@ -2,6 +2,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useState } from 'react';
 import { Button } from '@/components/ui';
 import { useForm, type SubmitHandler } from 'react-hook-form';
+import getErrorMessage from '@/utils/getErrorMessage';
+import type { SerializedError } from '@reduxjs/toolkit';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { useLoginMutation } from '@/redux/slices/authSlice';
 import routes from '@/utils/router';
 import AuthInput from '@/components/common/AuthInput/AuthInput';
 import { validationRules } from '@/utils/validation/validation';
@@ -10,9 +14,6 @@ import {
   EyeIcon,
   InstagramIcon,
 } from '@/assets/Icons/GeneralIcons';
-
-import API from '@/utils/api';
-import { ApiError } from '@/utils/error/classError';
 import styles from './Login.module.scss';
 
 interface LoginForm {
@@ -23,10 +24,7 @@ interface LoginForm {
 const LOGIN_ERRORS: Record<string, string> = {
   'Invalid credentials': 'Неверный логин или пароль',
   'Validation failed': 'Проверьте правильность заполнения полей',
-  NETWORK: 'Нет соединения с сервером',
 };
-
-const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -43,19 +41,33 @@ const Login = () => {
     },
   });
 
+  const [login] = useLoginMutation();
+
   const onSubmit: SubmitHandler<LoginForm> = async (
     data: LoginForm
   ): Promise<void> => {
     try {
-      const response = await API.login(data.userName, data.password);
+      const response = await login({
+        login: data.userName,
+        password: data.password,
+      }).unwrap();
       localStorage.setItem('token', response.token);
       navigate(routes.feed);
-    } catch (err) {
+    } catch (error) {
+      const err = error as FetchBaseQueryError | SerializedError;
+
+      const backendCode =
+        'status' in err &&
+        err.data &&
+        typeof err.data === 'object' &&
+        'error' in err.data
+          ? (err.data as { error?: string }).error
+          : undefined;
+
       const message =
-        err instanceof ApiError
-          ? (LOGIN_ERRORS[err.code] ?? err.code)
-          : FALLBACK_ERROR;
-      setError('root', { message });
+        (backendCode && LOGIN_ERRORS[backendCode]) ?? getErrorMessage(err);
+
+      setError('root', { type: 'custom', message });
     }
   };
 

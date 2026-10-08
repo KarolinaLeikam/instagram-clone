@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui';
 import { useEffect, useRef } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthMeQuery } from '@/redux/slices/authSlice';
 import { useDeletePostMutation } from '@/redux/slices/postsSlice';
 import { type PostType } from '@/types';
 
@@ -15,11 +15,11 @@ interface Props {
 const DeleteModal = ({ isOpen, onCancel, post }: Props) => {
   // const { allPostsFetch } = usePosts();
   const dialogRef = useRef<HTMLDialogElement | null>(null);
-  const { user } = useAuth();
+  const { data: user } = useAuthMeQuery();
   const [deletePost] = useDeletePostMutation();
 
   const handleDeletePost = async () => {
-    if (!user?.username) return;
+    if (!user?.user.username) return;
     try {
       await deletePost(post.id);
       // API.deletePost(post.id);

@@ -1,22 +1,21 @@
-import { useAuth } from '@/context/AuthContext';
-import { useGetFriend } from '@/context/GetUserInfo';
-import { useParams } from 'react-router-dom';
+import useProfileUsername from '@/hooks/useProfileUsername';
+import { useGetUserInfoQuery } from '@/redux/slices/userInfoSlice';
 
 const NameProfile = () => {
-  const { user } = useAuth();
-  const { userFriend, loading } = useGetFriend();
-  const { username } = useParams();
+  const currentProfile = useProfileUsername();
 
-  if (loading) {
+  const { data: user, isLoading } = useGetUserInfoQuery(currentProfile ?? '', {
+    skip: !currentProfile,
+  });
+
+  if (isLoading) {
     return <div>Загрузка профиля...</div>;
   }
 
-  const currentProfile = username ? userFriend : user;
-
   return (
     <div>
-      <h3>{currentProfile?.name}</h3>
-      <p>{currentProfile?.bio}</p>
+      <h3>{user?.name}</h3>
+      <p>{user?.bio}</p>
     </div>
   );
 };

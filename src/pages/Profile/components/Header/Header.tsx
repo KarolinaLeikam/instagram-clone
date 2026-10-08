@@ -1,4 +1,4 @@
-import { useAuth } from '@/context/AuthContext';
+import { useAuthMeQuery } from '@/redux/slices/authSlice';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { LockIcon, MenuBurgerIcon } from '@/assets/Icons/HeaderIcons';
 import {
@@ -12,7 +12,7 @@ import AddPhoto from '@/components/modal/AddPhoto/AddPhoto';
 import styles from './Header.module.scss';
 
 const Header = () => {
-  const { user } = useAuth();
+  const { data: user } = useAuthMeQuery();
 
   const { username } = useParams();
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const Header = () => {
           ) : (
             <AngleLeftIcon onClick={() => navigate(routes.feed)} />
           )}
-          <h1>{!pathYourProfile ? username : user?.username}</h1>
+          <h1>{!pathYourProfile ? username : user?.user.username}</h1>
           {pathYourProfile && <span className={styles.buttonNumber}>9+</span>}
         </div>
         <div className={styles.menuContainer}>

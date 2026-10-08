@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthMeQuery, useEditInfoMutation } from '@/redux/slices/authSlice';
 import { type IFormValues } from '@/types/index';
-import API from '@/utils/api';
-import { ApiError } from '@/utils/error/classError';
 import routes from '@/utils/router';
 import { AngleLeftIcon } from '@/assets/Icons/GeneralIcons';
 import AvatarImg from '@/assets/Images/Avatar.jpg';
@@ -12,10 +10,10 @@ import { StatusBar } from '@/components/common';
 import AddPhoto from '@/components/modal/AddPhoto/AddPhoto';
 import styles from './EditProfile.module.scss';
 
-const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
 const EditProfile = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useAuth();
+  const { data: authMeData } = useAuthMeQuery();
+  const user = authMeData?.user;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
@@ -32,6 +30,8 @@ const EditProfile = () => {
     setAvatarPreview(previewUrl);
   };
 
+  const [editInfo] = useEditInfoMutation();
+
   const onSubmit = async (data: IFormValues) => {
     try {
       const formData = new FormData();
@@ -40,12 +40,10 @@ const EditProfile = () => {
       if (avatarFile) {
         formData.append('avatar', avatarFile);
       }
-      const response = await API.editInfo(formData);
-      setUser(response.user ?? response);
+      await editInfo(formData);
       navigate(routes.profileOwn);
     } catch (err) {
-      const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
-      console.error(message);
+      console.error(err);
     }
   };
   return (

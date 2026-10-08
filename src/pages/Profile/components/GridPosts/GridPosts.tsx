@@ -1,17 +1,13 @@
-import { useParams } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
 import { useGetGridPostsQuery } from '@/redux/slices/postsSlice';
+import useProfileUsername from '@/hooks/useProfileUsername';
 import Picture from './components/Post/Picture';
 import styles from './GridPosts.module.scss';
 
 const GridPosts = () => {
-  const { username } = useParams();
-  const { user } = useAuth();
+  const currentProfile = useProfileUsername();
 
-  const usernameToFetch = username || user?.username;
-
-  const { data: posts = [] } = useGetGridPostsQuery(usernameToFetch, {
-    skip: !usernameToFetch,
+  const { data: posts = [] } = useGetGridPostsQuery(currentProfile, {
+    skip: !currentProfile,
   });
   return (
     <div className={styles.grid}>

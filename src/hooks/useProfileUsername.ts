@@ -1,11 +1,12 @@
 import { useParams } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+
+import { useAuthMeQuery } from '@/redux/slices/authSlice';
 
 const useProfileUsername = () => {
   const { username } = useParams();
-  const { user } = useAuth();
+  const { data: user } = useAuthMeQuery();
 
-  return username || user?.username;
+  return username || user?.user.username;
 };
 
 export default useProfileUsername;

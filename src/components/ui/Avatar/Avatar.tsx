@@ -1,7 +1,6 @@
-import { useParams } from 'react-router-dom';
 import { PlusSmallIcon } from '@/assets/Icons/GeneralIcons';
-import { useAuth } from '@/context/AuthContext';
-import { useGetFriend } from '@/context/GetUserInfo';
+import useProfileUsername from '@/hooks/useProfileUsername';
+import { useGetUserInfoQuery } from '@/redux/slices/userInfoSlice';
 import styles from './Avatar.module.scss';
 
 interface AvatarProps {
@@ -10,11 +9,11 @@ interface AvatarProps {
 }
 
 const Avatar = ({ className = '', size = 80 }: AvatarProps) => {
-  const { user } = useAuth();
-  const { userFriend } = useGetFriend();
-  const { username } = useParams();
+  const currentProfile = useProfileUsername();
+  const { data: userData } = useGetUserInfoQuery(currentProfile ?? '', {
+    skip: !currentProfile,
+  });
 
-  const currentProfile = username ? userFriend : user;
   const containerStyle = {
     width: `${size}px`,
     height: `${size}px`,
@@ -24,7 +23,7 @@ const Avatar = ({ className = '', size = 80 }: AvatarProps) => {
     <div className={`${styles.container} ${className}`} style={containerStyle}>
       <img
         className={styles.photo}
-        src={`http://localhost:4000${currentProfile?.avatarUrl}`}
+        src={`http://localhost:4000${userData?.avatarUrl}`}
         alt=""
       />
 

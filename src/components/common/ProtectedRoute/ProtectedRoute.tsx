@@ -1,17 +1,18 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthMeQuery } from '@/redux/slices/authSlice';
 import { Spinner } from '@/components/ui';
 import routes from '@/utils/router';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
+// пока юзер не залогинин, не показывай children
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { user, loading } = useAuth();
+  const { data, isLoading } = useAuthMeQuery();
 
-  if (loading) return <Spinner />;
+  if (isLoading) return <Spinner />;
 
-  return user ? children : <Navigate to={routes.login} replace />;
+  return data?.user ? children : <Navigate to={routes.login} replace />;
 };
 
 export default ProtectedRoute;

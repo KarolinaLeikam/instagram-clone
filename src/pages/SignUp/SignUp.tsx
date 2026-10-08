@@ -6,9 +6,11 @@ import {
   EyeClosedIcon,
   InstagramIcon,
 } from '@/assets/Icons/GeneralIcons';
+import { useSignUpMutation } from '@/redux/slices/authSlice';
+import getErrorMessage from '@/utils/getErrorMessage';
 import AuthInput from '@/components/common/AuthInput/AuthInput';
-import { ApiError } from '@/utils/error/classError';
-import API from '@/utils/api';
+import type { SerializedError } from '@reduxjs/toolkit';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { validationRules } from '@/utils/validation/validation';
 import styles from './SignUp.module.scss';
@@ -19,9 +21,10 @@ export interface FormInput {
   userName: string;
   password: string;
 }
-
-const FALLBACK_ERROR = 'Что-то пошло не так, попробуйте снова';
-
+const LOGIN_ERRORS: Record<string, string> = {
+  'Email or username already taken': 'Такой пользователь уже существует',
+  'Validation failed': 'Проверьте правильность заполнения полей',
+};
 const SignUp = () => {
   const {
     register,
@@ -40,6 +43,8 @@ const SignUp = () => {
 
   const navigate = useNavigate();
 
+  const [signUp] = useSignUpMutation();
+
   const onSubmit: SubmitHandler<FormInput> = async (data) => {
     try {
       const body = {
@@ -48,11 +53,23 @@ const SignUp = () => {
         name: data.fullName,
         password: data.password,
       };
-      const response = await API.signUp(body);
+      const response = await signUp(body).unwrap();
       localStorage.setItem('token', response.token);
       navigate(routes.feed);
-    } catch (err) {
-      const message = err instanceof ApiError ? err.code : FALLBACK_ERROR;
+    } catch (error) {
+      const err = error as SerializedError | FetchBaseQueryError;
+
+      const backendCode =
+        'status' in err &&
+        err.data &&
+        typeof err.data === 'object' &&
+        'error' in err.data
+          ? (err.data as { error?: string }).error
+          : undefined;
+
+      const message =
+        (backendCode && LOGIN_ERRORS[backendCode]) ?? getErrorMessage(err);
+
       setError('root', { message });
     }
   };

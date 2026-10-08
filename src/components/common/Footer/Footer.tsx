@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthMeQuery } from '@/redux/slices/authSlice';
 import {
   HomeIcon,
   PlayAltIcon,
@@ -11,7 +11,8 @@ import routes from '@/utils/router';
 import styles from './Footer.module.scss';
 
 const Footer = () => {
-  const { user } = useAuth();
+  const { data: user } = useAuthMeQuery();
+
   return (
     <div className={styles.container}>
       <div className={styles.contentImg}>
@@ -27,7 +28,7 @@ const Footer = () => {
           <div className={styles.circle}>
             <img
               className={styles.AvatarImg}
-              src={`http://localhost:4000${user?.avatarUrl}`}
+              src={`http://localhost:4000${user?.user.avatarUrl}`}
               alt=""
             />
           </div>

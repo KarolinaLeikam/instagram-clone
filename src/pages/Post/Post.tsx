@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthMeQuery } from '@/redux/slices/authSlice';
 import { useGetGridPostsQuery } from '@/redux/slices/postsSlice';
 import { Footer, StatusBar } from '@/components/common';
 import PostFriend from '@/components/common/PostFriend/PostFriend';
@@ -9,7 +9,7 @@ import HeaderPublication from './components/HeaderPublication/HeaderPublication'
 import styles from './Post.module.scss';
 
 const Post = () => {
-  const { user } = useAuth();
+  const { data: user } = useAuthMeQuery();
 
   const location = useLocation();
   const { username } = useParams();
@@ -18,7 +18,7 @@ const Post = () => {
 
   const postRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  const usernameToFetch = username || user?.username;
+  const usernameToFetch = username || user?.user.username;
 
   const { data: posts = [] } = useGetGridPostsQuery(usernameToFetch, {
     skip: !usernameToFetch,

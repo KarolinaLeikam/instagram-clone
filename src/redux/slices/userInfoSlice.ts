@@ -1,5 +1,9 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { type ContextUserFriend, type FollowResponse } from '@/types';
+import {
+  type ContextUserFriend,
+  type FollowResponse,
+  type UserSearch,
+} from '@/types';
 import baseQueryWithReauth from './basicBaseQuery';
 
 export const userInfo = createApi({
@@ -21,7 +25,16 @@ export const userInfo = createApi({
       }),
       invalidatesTags: ['userInfo'],
     }),
+    searchUser: build.query<UserSearch[], string>({
+      query: (searchResult) =>
+        `users/search?q=${encodeURIComponent(searchResult)}`,
+      providesTags: ['userInfo'],
+    }),
   }),
 });
 
-export const { useGetUserInfoQuery, useFollowUserMutation } = userInfo;
+export const {
+  useGetUserInfoQuery,
+  useFollowUserMutation,
+  useSearchUserQuery,
+} = userInfo;

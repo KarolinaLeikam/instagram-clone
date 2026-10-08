@@ -17,13 +17,12 @@ import {
 import styles from './Information.module.scss';
 
 const Information = () => {
-
   const location = useLocation();
   const pathYourProfile = location.pathname === routes.profileOwn;
 
-  const whatIsUser = useProfileUsername();
-  const { data: userData } = useGetUserInfoQuery(whatIsUser ?? '', {
-    skip: !whatIsUser,
+  const currentProfile = useProfileUsername();
+  const { data: userData } = useGetUserInfoQuery(currentProfile ?? '', {
+    skip: !currentProfile,
   });
   const userFollow = userData?.isFollowing;
   const [followUser] = useFollowUserMutation();
@@ -34,7 +33,7 @@ const Information = () => {
     try {
       await followUser({
         method,
-        username: whatIsUser,
+        username: currentProfile,
       }).unwrap();
     } catch (err) {
       console.error(err);
@@ -43,7 +42,7 @@ const Information = () => {
 
   console.log(userFollow);
 
-  console.log(whatIsUser);
+  console.log(currentProfile);
   return (
     <div className={styles.container}>
       <div className={styles.containerAvatar}>
