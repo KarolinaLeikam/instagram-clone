@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import * as Sentry from '@sentry/react';
 import { setupListeners } from '@reduxjs/toolkit/query/react';
 import { postsSlice } from './slices/postsSlice';
 import { userInfo } from './slices/userInfoSlice';
@@ -16,6 +17,8 @@ const store = configureStore({
       userInfo.middleware,
       authSlice.middleware
     ),
+  enhancers: (getDefaultEnhancers) =>
+    getDefaultEnhancers().concat(Sentry.createReduxEnhancer()),
 });
 
 setupListeners(store.dispatch);

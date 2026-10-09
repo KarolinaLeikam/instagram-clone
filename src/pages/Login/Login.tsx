@@ -76,6 +76,14 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
+  // Не throw new Error(...) — настоящий TypeError от обращения к полю
+  // несуществующего объекта, и срабатывает он не в onClick, а в рендере
+  // (клик только переключает crashRender, сам краш — на следующем рендере).
+  // Именно поэтому ЭТУ ошибку поймает <Sentry.ErrorBoundary> из main.tsx,
+  // в отличие от кнопки "Сломать" ниже — та кидает прямо в onClick,
+  // ErrorBoundary такое не ловит (ловит только ошибки во время рендера).
+  const [crashRender, setCrashRender] = useState(false);
+
   return (
     <div className={styles.container}>
       <InstagramIcon />
@@ -114,6 +122,26 @@ const Login = () => {
         <Button type="submit" className={styles.button}>
           Log in
         </Button>
+        <button
+          type="button"
+          onClick={() => {
+            throw new Error('Sentry test error');
+          }}
+        >
+          Сломать (onClick, ErrorBoundary НЕ ловит)
+        </button>
+        <button type="button" onClick={() => setCrashRender(true)}>
+          Сломать рендер (ErrorBoundary должен поймать)
+        </button>
+        {crashRender &&
+          (() => {
+            const brokenUser: { name: string } | undefined = undefined;
+            // ! — говорим TS "довер ься мне, тут не undefined" (хотя это
+            // неправда). Без этого TS сам не даст скомпилировать баг,
+            // который мы зовём специально. В реальном коде так писать
+            // нельзя — это только для намеренного теста.
+            return <p>{brokenUser!.name}</p>;
+          })()}
       </form>
       <div className={styles.layoutText}>
         <p>Dont have an account?</p>

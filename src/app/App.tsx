@@ -3,6 +3,7 @@ import {
   Navigate,
   RouterProvider,
 } from 'react-router-dom';
+import * as Sentry from '@sentry/react';
 import Feed from '@/pages/Feed/Feed';
 import Post from '@/pages/Post/Post';
 import Profile from '@/pages/Profile/Profile';
@@ -14,7 +15,16 @@ import routes from '@/utils/router';
 import ProtectedLayout from './componentsProvider/ProtectedLayout';
 import './styles/index.js';
 
-const router = createBrowserRouter([
+// createBrowserRouter сам по себе ловит ошибки внутри роутов СВОЕЙ
+// границей (вот откуда "Unexpected Application Error!") и никогда не
+// зовёт Sentry. wrapCreateBrowserRouter подменяет эту внутреннюю границу
+// на такую, что сначала репортит ошибку в Sentry, а потом уже решает,
+// что показать — обычный <Sentry.ErrorBoundary> снаружи тут не поможет,
+// роутер перехватывает раньше него.
+const sentryCreateBrowserRouter =
+  Sentry.wrapCreateBrowserRouter(createBrowserRouter);
+
+const router = sentryCreateBrowserRouter([
   {
     path: routes.login,
     element: <Login />,
