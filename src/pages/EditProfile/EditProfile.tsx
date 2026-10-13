@@ -5,7 +5,7 @@ import { useAuthMeQuery, useEditInfoMutation } from '@/redux/slices/authSlice';
 import { type IFormValues } from '@/types/index';
 import routes from '@/utils/router';
 import { AngleLeftIcon } from '@/assets/Icons/GeneralIcons';
-import AvatarImg from '@/assets/Images/Avatar.jpg';
+import AvatarImg from '@/assets/Images/Avatar.svg';
 import { StatusBar } from '@/components/common';
 import AddPhoto from '@/components/modal/AddPhoto/AddPhoto';
 import styles from './EditProfile.module.scss';

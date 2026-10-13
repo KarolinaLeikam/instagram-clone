@@ -1,6 +1,8 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { useState } from 'react';
 import { Button } from '@/components/ui';
+
+import * as Sentry from '@sentry/react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import getErrorMessage from '@/utils/getErrorMessage';
 import type { SerializedError } from '@reduxjs/toolkit';
@@ -68,6 +70,7 @@ const Login = () => {
         (backendCode && LOGIN_ERRORS[backendCode]) ?? getErrorMessage(err);
 
       setError('root', { type: 'custom', message });
+      Sentry.captureException(error);
     }
   };
 

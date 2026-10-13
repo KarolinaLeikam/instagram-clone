@@ -40,9 +40,6 @@ const Information = () => {
     }
   };
 
-  console.log(userFollow);
-
-  console.log(currentProfile);
   return (
     <div className={styles.container}>
       <div className={styles.containerAvatar}>

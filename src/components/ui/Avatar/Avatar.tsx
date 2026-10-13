@@ -1,5 +1,6 @@
 import { PlusSmallIcon } from '@/assets/Icons/GeneralIcons';
 import useProfileUsername from '@/hooks/useProfileUsername';
+import AvatarImg from '@/assets/Images/Avatar.svg';
 import { useGetUserInfoQuery } from '@/redux/slices/userInfoSlice';
 import styles from './Avatar.module.scss';
 
@@ -23,7 +24,11 @@ const Avatar = ({ className = '', size = 80 }: AvatarProps) => {
     <div className={`${styles.container} ${className}`} style={containerStyle}>
       <img
         className={styles.photo}
-        src={`http://localhost:4000${userData?.avatarUrl}`}
+        src={
+          userData?.avatarUrl
+            ? `http://localhost:4000${userData.avatarUrl}`
+            : AvatarImg
+        }
         alt=""
       />
 

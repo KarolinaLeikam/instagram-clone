@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from 'eslint-plugin-storybook';
+
 import js from '@eslint/js';
 import globals from 'globals';
 import { configs, plugins } from 'eslint-config-airbnb-extended';
@@ -10,27 +13,19 @@ export default [
     // cypress/ живёт вне src, использует свои глобалы (cy, Cypress) и
     // свой отдельный tsconfig — airbnb-правила проекта тут не применимы
     ignores: ['dist', 'node_modules', 'cypress/**', 'cypress.config.ts'],
-  },
-
-  // Base JS recommended
-  js.configs.recommended,
-
-  // Airbnb plugin presets
+  }, // Base JS recommended
+  js.configs.recommended, // Airbnb plugin presets
   plugins.stylistic,
   plugins.importX,
   plugins.react,
   plugins.reactA11y,
   plugins.reactHooks,
   plugins.typescriptEslint,
-  plugins.node,
-
-  // Airbnb config presets (base + react + typescript)
+  plugins.node, // Airbnb config presets (base + react + typescript)
   ...configs.base.recommended,
   ...configs.base.typescript,
   ...configs.react.recommended,
-  ...configs.react.typescript,
-
-  // Project language options
+  ...configs.react.typescript, // Project language options
   {
     files: ['**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
@@ -48,9 +43,7 @@ export default [
     settings: {
       react: { version: 'detect' },
     },
-  },
-
-  // Vite react-refresh + project tweaks
+  }, // Vite react-refresh + project tweaks
   {
     files: ['**/*.{ts,tsx,js,jsx}'],
     plugins: { 'react-refresh': reactRefresh },
@@ -78,23 +71,26 @@ export default [
       // Prisma's `_count` relation aggregate — not renameable
       'no-underscore-dangle': ['error', { allow: ['_count'] }],
     },
-  },
-
-  // Test files + vitest config may import devDependencies
+  }, // Test files + vitest config may import devDependencies
   {
-    files: ['**/*.test.{ts,tsx}', 'src/test/**', 'vite.config.ts'],
+    files: [
+      '**/*.test.{ts,tsx}',
+      '**/*.stories.{ts,tsx}',
+      'src/test/**',
+      'vite.config.ts',
+      '.storybook/**',
+    ],
     rules: {
       'import-x/no-extraneous-dependencies': [
         'error',
         { devDependencies: true },
       ],
     },
-  },
-
-  // Prettier last — turn off conflicting rules, run prettier as a rule
+  }, // Prettier last — turn off conflicting rules, run prettier as a rule
   { rules: prettierConfigRules },
   {
     plugins: { prettier: prettierPlugin },
     rules: { 'prettier/prettier': 'error' },
   },
+  ...storybook.configs['flat/recommended'],
 ];
