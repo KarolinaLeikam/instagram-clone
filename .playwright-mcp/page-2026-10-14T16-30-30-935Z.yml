@@ -1,0 +1,5 @@
+- generic [ref=f5e24]:
+  - img [ref=f5e27] [cursor=pointer]
+  - textbox "Find user" [active] [ref=f5e29]: bo
+  - link "Return" [ref=f5e30] [cursor=pointer]:
+    - /url: /profile

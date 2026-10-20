@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { CrossIcon } from '@/assets/Icons/GeneralIcons';
+import useClickOutside from '@/hooks/useClickOutside';
 import getErrorMessage from '@/utils/getErrorMessage';
 import { Button } from '@/components/ui';
 import { useCreatePostMutation } from '@/redux/slices/postsSlice';
@@ -27,16 +28,7 @@ const AddPhoto = ({
 
   const [createPost, { error, reset }] = useCreatePostMutation();
 
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-
-    if (isOpen) {
-      dialog.showModal();
-    } else {
-      dialog.close();
-    }
-  }, [isOpen]);
+  useClickOutside({ dialogRef, isOpen });
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;

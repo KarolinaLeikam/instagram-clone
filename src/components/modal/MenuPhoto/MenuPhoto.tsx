@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui';
 import { CrossIcon } from '@/assets/Icons/GeneralIcons';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { type PostType } from '@/types';
+import useClickOutside from '@/hooks/useClickOutside';
 import DeleteModal from '../DeleteModal/DeleteModal';
 
 import styles from './MenuPhoto.module.scss';
@@ -16,17 +17,15 @@ const MenuPhoto: React.FC<MenuType> = ({ isOpen, onMyClose, post }) => {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) {
-      return;
+  useClickOutside({ dialogRef, isOpen });
+
+  // clicks on ::backdrop target the <dialog> itself,
+  // clicks on the content target .content or its children
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
+    if (e.target === e.currentTarget) {
+      onMyClose();
     }
-    if (isOpen) {
-      dialog.showModal();
-    } else {
-      dialog.close();
-    }
-  }, [isOpen]);
+  };
 
   const handleClick = () => {
     setIsModalOpen(true);
@@ -39,12 +38,20 @@ const MenuPhoto: React.FC<MenuType> = ({ isOpen, onMyClose, post }) => {
 
   return (
     <>
-      <dialog ref={dialogRef} className={styles.dialog}>
-        <CrossIcon onClick={() => onMyClose()} />
-        <div className={styles.containerBtn}>
-          <Button className={styles.button} onClick={handleClick}>
-            Delete post
-          </Button>
+      {/* backdrop click is a mouse shortcut; keyboard users close with Esc */}
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
+      <dialog
+        ref={dialogRef}
+        className={styles.dialog}
+        onClick={handleBackdropClick}
+      >
+        <div className={styles.content}>
+          <CrossIcon onClick={() => onMyClose()} />
+          <div className={styles.containerBtn}>
+            <Button className={styles.button} onClick={handleClick}>
+              Delete post
+            </Button>
+          </div>
         </div>
       </dialog>
       <DeleteModal post={post} isOpen={isModalOpen} onCancel={onCancel} />

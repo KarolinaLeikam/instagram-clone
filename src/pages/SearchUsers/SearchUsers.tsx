@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSearchUserQuery } from '@/redux/slices/userInfoSlice';
-import { type UserSearch } from '@/types/index';
+import useDebounce from '@/hooks/useDebounce';
 import routes from '@/utils/router';
 import { SearchIcon } from '@/assets/Icons/FooterIcons';
 import { CrossIcon } from '@/assets/Icons/GeneralIcons';
@@ -9,20 +9,25 @@ import { CrossIcon } from '@/assets/Icons/GeneralIcons';
 import styles from './SearchUsers.module.scss';
 
 const SearchUsers = () => {
-  const [user, setUser] = useState<UserSearch[]>([]);
   const [searchResult, setSearchResult] = useState('');
 
-  const { data: userSearch = [] } = useSearchUserQuery(searchResult);
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (!searchResult.trim()) {
-        setUser([]);
-        return;
-      }
-      setUser(userSearch);
-    }, 700);
-    return () => clearTimeout(timeoutId);
-  }, [searchResult, userSearch]);
+  const debouncedValue = useDebounce(searchResult);
+
+  const { data } = useSearchUserQuery(debouncedValue, {
+    skip: !debouncedValue,
+  });
+  // with skip: true RTK Query keeps the last data, so clear it manually
+  const userSearch = debouncedValue ? (data ?? []) : [];
+
+  const inputHandler = (
+    e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>
+  ) => {
+    if (!e.target.value.trim()) {
+      setSearchResult('');
+      return;
+    }
+    setSearchResult(e.target.value);
+  };
 
   return (
     <div className={styles.root}>
@@ -32,13 +37,11 @@ const SearchUsers = () => {
         type="text"
         placeholder="Find user"
         className={styles.input}
-        onChange={(e) => {
-          setSearchResult(e.target.value);
-        }}
+        onChange={inputHandler}
       />
       <Link to={routes.profileOwn}>Return</Link>
       <div>
-        {user.map((u) => (
+        {userSearch.map((u) => (
           <Link to={`${routes.profileOwn}/${u.username}`} key={u.id}>
             <p>{u.username}</p>
           </Link>

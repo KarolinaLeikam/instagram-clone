@@ -1,0 +1,22 @@
+- generic [ref=f3e23]:
+  - generic [ref=f3e34]:
+    - button "Exit" [ref=f3e35] [cursor=pointer]
+    - generic [ref=f3e46]:
+      - paragraph [ref=f3e52]: Your story
+      - button "FriendName" [ref=f3e53] [cursor=pointer]:
+        - paragraph [ref=f3e55]: FriendName
+      - button "FriendName" [ref=f3e56] [cursor=pointer]:
+        - paragraph [ref=f3e58]: FriendName
+      - button "FriendName" [ref=f3e59] [cursor=pointer]:
+        - paragraph [ref=f3e61]: FriendName
+      - button "FriendName" [ref=f3e62] [cursor=pointer]:
+        - paragraph [ref=f3e64]: FriendName
+      - button "FriendName" [ref=f3e65] [cursor=pointer]:
+        - paragraph [ref=f3e67]: FriendName
+  - generic [ref=f3e70]:
+    - link [ref=f3e71] [cursor=pointer]:
+      - /url: /main
+    - link [ref=f3e76] [cursor=pointer]:
+      - /url: /search
+    - link [ref=f3e81] [cursor=pointer]:
+      - /url: /profile

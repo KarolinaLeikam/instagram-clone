@@ -1,0 +1,24 @@
+- generic [ref=f5e4]:
+  - img [ref=f5e7] [cursor=pointer]
+  - textbox "Find user" [active] [ref=f5e9]: al
+  - link "Return" [ref=f5e10] [cursor=pointer]:
+    - /url: /profile
+  - generic [ref=f5e11]:
+    - link [ref=f5e12] [cursor=pointer]:
+      - /url: /profile/KarolinaLeikam
+      - paragraph [ref=f5e13]: KarolinaLeikam
+    - link [ref=f5e14] [cursor=pointer]:
+      - /url: /profile/KarolinaLey
+      - paragraph [ref=f5e15]: KarolinaLey
+    - link [ref=f5e16] [cursor=pointer]:
+      - /url: /profile/KarolinkaLeikam
+      - paragraph [ref=f5e17]: KarolinkaLeikam
+    - link [ref=f5e18] [cursor=pointer]:
+      - /url: /profile/LinaLeikam
+      - paragraph [ref=f5e19]: LinaLeikam
+    - link [ref=f5e20] [cursor=pointer]:
+      - /url: /profile/LinaLey
+      - paragraph [ref=f5e21]: LinaLey
+    - link [ref=f5e22] [cursor=pointer]:
+      - /url: /profile/alice
+      - paragraph [ref=f5e23]: alice

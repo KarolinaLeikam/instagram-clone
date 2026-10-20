@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useAuthMeQuery } from '@/redux/slices/authSlice';
+import useClickOutside from '@/hooks/useClickOutside';
 import { useDeletePostMutation } from '@/redux/slices/postsSlice';
 import { type PostType } from '@/types';
 
@@ -30,15 +31,7 @@ const DeleteModal = ({ isOpen, onCancel, post }: Props) => {
     }
   };
 
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    if (isOpen) {
-      dialog.showModal();
-    } else {
-      dialog.close();
-    }
-  }, [isOpen]);
+  useClickOutside({ dialogRef, isOpen });
 
   return (
     <dialog ref={dialogRef} className={styles.dialog}>

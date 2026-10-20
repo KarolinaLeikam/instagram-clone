@@ -1,0 +1,11 @@
+- generic [ref=e3]:
+  - generic [ref=e6]:
+    - textbox "User Name" [ref=e8]
+    - textbox "Password" [ref=e11]
+    - button "Log in" [ref=e15] [cursor=pointer]
+    - button "Сломать (onClick, ErrorBoundary НЕ ловит)" [ref=e16] [cursor=pointer]
+    - button "Сломать рендер (ErrorBoundary должен поймать)" [ref=e17] [cursor=pointer]
+  - generic [ref=e18]:
+    - paragraph [ref=e19]: Dont have an account?
+    - link "Sign Up." [ref=e20] [cursor=pointer]:
+      - /url: /signup
